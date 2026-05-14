@@ -1,0 +1,20 @@
+# Secrets — never commit real values
+.env
+.env.local
+.env.*.local
+padel-noir/.env
+
+# Node / build
+padel-noir/node_modules/
+padel-noir/dist/
+padel-noir/.vite/
+
+# Booking data (local queue)
+padel-noir/server/data/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/

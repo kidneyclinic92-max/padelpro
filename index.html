@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PADEL NOIR — Dominate the Court</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --charcoal: #0a0a0a;
+      --lime: #c8ff00;
+      --lime-dim: rgba(200,255,0,0.15);
+      --lime-glow: rgba(200,255,0,0.45);
+      --offwhite: #f0ede6;
+      --mid: #1a1a1a;
+      --border: rgba(240,237,230,0.1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--charcoal);
+      color: var(--offwhite);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    body.touch-device { cursor: auto; }
+
+    h1, h2, h3, h4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── PAGE LOAD WIPE ── */
+    #page-wipe {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      pointer-events: none;
+      animation: wipeOut 0.8s 0.3s cubic-bezier(0.77,0,0.18,1) forwards;
+    }
+
+    @keyframes wipeOut {
+      0%   { opacity: 1; transform: scaleY(1); transform-origin: top; }
+      100% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    #cursor-dot {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--lime);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.05s, width 0.2s, height 0.2s;
+    }
+
+    #cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--lime);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9997;
+      transform: translate(-50%, -50%);
+      transition: transform 0.12s cubic-bezier(0.25,1,0.5,1), width 0.3s, height 0.3s, opacity 0.3s;
+    }
+
+    body.cursor-hover #cursor-dot { width: 12px; height: 12px; }
+    body.cursor-hover #cursor-ring { width: 52px; height: 52px; opacity: 0.7; }
+
+    /* ── NAV ── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 48px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+    }
+
+    #nav.scrolled {
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.12em;
+      color: var(--lime);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      position: relative;
+      padding-bottom: 3px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: var(--lime);
+      transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .nav-links a:hover { color: var(--lime); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--lime);
+      color: var(--lime);
+      padding: 10px 22px;
+      border-radius: 2px;
+      transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+    }
+
+    .nav-cta:hover {
+      background: var(--lime);
+      color: #000;
+      box-shadow: 0 0 20px var(--lime-glow);
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #060a06;
+    }
+
+    /* Animated CSS court background (canvas fallback) */
+    #hero-canvas-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.30) 0%,
+        rgba(0,0,0,0.55) 50%,
+        rgba(10,10,10,0.93) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      padding: 0 24px;
+      max-width: 1100px;
+    }
+
+    .hero-headline {
+      font-size: clamp(72px, 12vw, 160px);
+      line-height: 0.9;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0 0.25em;
+    }
+
+    .hero-word {
+      display: inline-block;
+      overflow: hidden;
+    }
+
+    .hero-word span {
+      display: block;
+      transform: translateY(110%);
+      animation: wordReveal 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-word:nth-child(1) span { animation-delay: 0.5s; }
+    .hero-word:nth-child(2) span { animation-delay: 0.7s; }
+    .hero-word:nth-child(3) span { animation-delay: 0.9s; }
+
+    @keyframes wordReveal {
+      to { transform: translateY(0); }
+    }
+
+    .hero-sub {
+      margin-top: 24px;
+      font-size: clamp(15px, 2vw, 19px);
+      font-weight: 300;
+      color: rgba(240,237,230,0.75);
+      letter-spacing: 0.06em;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      margin-top: 40px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.2em;
+      color: #000;
+      background: var(--lime);
+      border: 2px solid var(--lime);
+      padding: 16px 48px;
+      border-radius: 2px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s 1.4s cubic-bezier(0.4,0,0.2,1) forwards;
+      transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border: 2px solid var(--lime);
+      border-radius: 3px;
+      animation: ctaPulse 2.5s 2s ease-in-out infinite;
+    }
+
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 0 0 0 var(--lime-glow); opacity: 1; }
+      50%       { box-shadow: 0 0 0 12px transparent; opacity: 0.4; }
+    }
+
+    .hero-cta:hover {
+      background: transparent;
+      color: var(--lime);
+      box-shadow: 0 0 32px var(--lime-glow), inset 0 0 16px rgba(200,255,0,0.05);
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s 1.8s forwards;
+    }
+
+    .scroll-indicator span {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(240,237,230,0.5);
+    }
+
+    .scroll-arrow {
+      width: 20px; height: 20px;
+      border-right: 1.5px solid var(--lime);
+      border-bottom: 1.5px solid var(--lime);
+      transform: rotate(45deg);
+      animation: bounce 1.8s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(8px); }
+    }
+
+    /* ── SECTION COMMONS ── */
+    section { position: relative; }
+
+    .section-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--lime);
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 120px 0;
+      overflow: hidden;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .about-stats {
+      background: var(--lime);
+      color: #000;
+      padding: 80px 64px;
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
+    }
+
+    .stats-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .stat-item {}
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 8vw, 96px);
+      line-height: 1;
+      color: #000;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.65);
+      margin-top: 4px;
+    }
+
+    .about-text {
+      background: var(--mid);
+      padding: 80px 64px 80px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .about-heading {
+      font-size: clamp(42px, 5vw, 72px);
+      line-height: 0.95;
+      margin-bottom: 28px;
+      color: var(--offwhite);
+    }
+
+    .about-heading em {
+      color: var(--lime);
+      font-style: normal;
+    }
+
+    .about-text p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(240,237,230,0.7);
+      max-width: 480px;
+    }
+
+    .about-text p + p { margin-top: 16px; }
+
+    /* ── COURTS ── */
+    #courts {
+      padding: 120px 0;
+    }
+
+    .courts-header {
+      padding: 0 48px;
+      max-width: 1280px;
+      margin: 0 auto 48px;
+    }
+
+    .courts-heading {
+      font-size: clamp(48px, 6vw, 88px);
+      line-height: 0.95;
+    }
+
+    .courts-scroll-wrap {
+      padding: 0 48px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      display: flex;
+      gap: 24px;
+      cursor: grab;
+    }
+
+    .courts-scroll-wrap::-webkit-scrollbar { display: none; }
+    .courts-scroll-wrap:active { cursor: grabbing; }
+
+    .court-card {
+      flex: 0 0 340px;
+      height: 460px;
+      scroll-snap-align: start;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      background: var(--mid);
+    }
+
+    .court-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .court-card:hover .court-bg { transform: scale(1.06); }
+
+    .court-card:nth-child(1) .court-bg {
+      background: linear-gradient(160deg, #1a2a0a 0%, #0d1a0a 40%, #0a120a 100%);
+    }
+    .court-card:nth-child(2) .court-bg {
+      background: linear-gradient(160deg, #0a1520 0%, #0a1018 40%, #060a10 100%);
+    }
+    .court-card:nth-child(3) .court-bg {
+      background: linear-gradient(160deg, #1a1008 0%, #120c06 40%, #0a0804 100%);
+    }
+    .court-card:nth-child(4) .court-bg {
+      background: linear-gradient(160deg, #120a1a 0%, #0c0812 40%, #070509 100%);
+    }
+
+    .court-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      background-image:
+        linear-gradient(var(--lime) 1px, transparent 1px),
+        linear-gradient(90deg, var(--lime) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .court-content {
+      position: absolute;
+      inset: 0;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .court-number {
+      position: absolute;
+      top: 28px; right: 28px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 96px;
+      line-height: 1;
+      color: rgba(240,237,230,0.05);
+      pointer-events: none;
+    }
+
+    .court-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: 1px solid var(--lime);
+      color: var(--lime);
+      padding: 5px 12px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+
+    .court-name {
+      font-size: 36px;
+      color: var(--offwhite);
+      line-height: 1;
+    }
+
+    .court-book-btn {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: var(--lime);
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.2em;
+      text-align: center;
+      padding: 18px;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      cursor: pointer;
+      border: none;
+    }
+
+    .court-card:hover .court-book-btn { transform: translateY(0); }
+
+    /* ── COACHES ── */
+    #coaches {
+      padding: 120px 0;
+      background: var(--mid);
+    }
+
+    .coaches-heading {
+      font-size: clamp(48px, 6vw, 88px);
+      margin-bottom: 64px;
+    }
+
+    .coaches-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .coach-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 40px 32px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .coach-card:hover {
+      border-color: rgba(200,255,0,0.3);
+      background: rgba(200,255,0,0.03);
+    }
+
+    .coach-photo-wrap {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .coach-photo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--lime);
+      opacity: 0;
+      transition: opacity 0.3s;
+      transform: scale(1.06);
+    }
+
+    .coach-card:hover .coach-photo-wrap::after { opacity: 1; }
+
+    .coach-photo {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) brightness(0.8);
+      transition: filter 0.5s cubic-bezier(0.4,0,0.2,1);
+      background: var(--charcoal);
+    }
+
+    .coach-card:hover .coach-photo { filter: grayscale(0%) brightness(1); }
+
+    .coach-avatar {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      color: var(--lime);
+      background: #111;
+      filter: grayscale(100%);
+      transition: filter 0.5s;
+    }
+
+    .coach-card:hover .coach-avatar { filter: grayscale(0%); }
+
+    .coach-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lime);
+      background: var(--lime-dim);
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+    }
+
+    .coach-name {
+      font-size: 32px;
+      color: var(--offwhite);
+      margin-bottom: 12px;
+    }
+
+    .coach-bio {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(240,237,230,0.6);
+    }
+
+    /* ── MEMBERSHIP ── */
+    #membership {
+      padding: 120px 0;
+    }
+
+    .membership-heading {
+      font-size: clamp(48px, 6vw, 88px);
+      margin-bottom: 16px;
+    }
+
+    .membership-sub {
+      color: rgba(240,237,230,0.6);
+      font-size: 16px;
+      margin-bottom: 64px;
+      max-width: 500px;
+    }
+
+    .membership-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .tier-card {
+      border-radius: 6px;
+      padding: 48px 36px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: relative;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s;
+      overflow: hidden;
+    }
+
+    .tier-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(200,255,0,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .tier-card.featured {
+      border-color: var(--lime);
+      background: rgba(200,255,0,0.05);
+      transform: translateY(-12px);
+    }
+
+    .tier-card.featured:hover {
+      transform: translateY(-20px);
+      box-shadow: 0 0 60px rgba(200,255,0,0.2), 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .tier-card:not(.featured):hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .tier-badge {
+      position: absolute;
+      top: 0; right: 32px;
+      background: var(--lime);
+      color: #000;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 0 0 6px 6px;
+    }
+
+    .tier-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 16px;
+    }
+
+    .tier-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px;
+      line-height: 1;
+      color: var(--offwhite);
+      margin-bottom: 4px;
+    }
+
+    .tier-price sup {
+      font-size: 28px;
+      vertical-align: top;
+      margin-top: 16px;
+      display: inline-block;
+    }
+
+    .tier-period {
+      font-size: 13px;
+      color: rgba(240,237,230,0.5);
+      margin-bottom: 36px;
+    }
+
+    .tier-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 32px;
+    }
+
+    .tier-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .tier-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: rgba(240,237,230,0.8);
+    }
+
+    .check-icon {
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--lime-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    .check-icon svg {
+      width: 10px; height: 10px;
+      stroke: var(--lime);
+      stroke-width: 2.5;
+      fill: none;
+      stroke-dasharray: 16;
+      stroke-dashoffset: 16;
+      transition: stroke-dashoffset 0.4s 0.1s;
+    }
+
+    .tier-card.visible .check-icon svg {
+      stroke-dashoffset: 0;
+    }
+
+    .tier-btn {
+      display: block;
+      margin-top: 36px;
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.2em;
+      padding: 16px;
+      border-radius: 2px;
+      border: 1px solid var(--lime);
+      color: var(--lime);
+      transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+    }
+
+    .tier-btn:hover, .tier-card.featured .tier-btn {
+      background: var(--lime);
+      color: #000;
+      box-shadow: 0 0 24px var(--lime-glow);
+    }
+
+    .tier-card.featured .tier-btn:hover {
+      box-shadow: 0 0 40px rgba(200,255,0,0.5);
+    }
+
+    /* ── BOOKING CTA ── */
+    #booking-cta {
+      padding: 160px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .noise-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E") center/256px,
+        linear-gradient(135deg, #0f0f0f 0%, #141414 100%);
+      opacity: 0.9;
+    }
+
+    .booking-cta-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .booking-giant-text {
+      font-size: clamp(52px, 9vw, 140px);
+      line-height: 1;
+      color: var(--offwhite);
+    }
+
+    .booking-giant-text em {
+      color: var(--lime);
+      font-style: normal;
+    }
+
+    .booking-sub {
+      margin-top: 20px;
+      font-size: 17px;
+      color: rgba(240,237,230,0.6);
+      margin-bottom: 48px;
+    }
+
+    .booking-btn {
+      display: inline-block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.2em;
+      color: #000;
+      background: var(--lime);
+      padding: 20px 60px;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      transition: box-shadow 0.3s, transform 0.2s;
+    }
+
+    .booking-btn:hover {
+      box-shadow: 0 0 48px rgba(200,255,0,0.5);
+      transform: scale(1.03);
+    }
+
+    /* ── MODAL ── */
+    #modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s;
+    }
+
+    #modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: #111;
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 6px;
+      padding: 56px;
+      width: 100%;
+      max-width: 520px;
+      transform: translateY(32px) scale(0.97);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    #modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px; right: 24px;
+      background: none;
+      border: none;
+      color: rgba(240,237,230,0.5);
+      font-size: 28px;
+      cursor: pointer;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .modal-close:hover { color: var(--lime); }
+
+    .modal-title {
+      font-size: 48px;
+      color: var(--offwhite);
+      margin-bottom: 8px;
+    }
+
+    .modal-sub {
+      font-size: 14px;
+      color: rgba(240,237,230,0.5);
+      margin-bottom: 36px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(240,237,230,0.6);
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--offwhite);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .form-group select {
+      background-color: #1a1a1a;
+      cursor: pointer;
+    }
+
+    .form-group select option {
+      background: #1a1a1a;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--lime);
+      background: rgba(200,255,0,0.04);
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .form-submit {
+      width: 100%;
+      margin-top: 8px;
+      background: var(--lime);
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.2em;
+      padding: 18px;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: box-shadow 0.3s, transform 0.2s;
+    }
+
+    .form-submit:hover {
+      box-shadow: 0 0 32px rgba(200,255,0,0.4);
+      transform: scale(1.01);
+    }
+
+    /* ── FOOTER ── */
+    #footer {
+      border-top: 1px solid var(--border);
+      padding: 64px 0 40px;
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 48px;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.12em;
+      color: var(--lime);
+    }
+
+    .footer-tagline {
+      font-size: 13px;
+      color: rgba(240,237,230,0.4);
+      margin-top: 4px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .footer-col h5 {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(240,237,230,0.4);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col ul a {
+      font-size: 14px;
+      color: rgba(240,237,230,0.7);
+      transition: color 0.2s;
+    }
+
+    .footer-col ul a:hover { color: var(--lime); }
+
+    .footer-socials {
+      display: flex;
+      gap: 16px;
+    }
+
+    .social-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(240,237,230,0.6);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+
+    .social-btn:hover {
+      border-color: var(--lime);
+      color: var(--lime);
+      background: var(--lime-dim);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(240,237,230,0.3);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+    }
+
+    .footer-legal a {
+      color: rgba(240,237,230,0.3);
+      transition: color 0.2s;
+    }
+
+    .footer-legal a:hover { color: var(--lime); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 1024px) {
+      .coaches-grid { grid-template-columns: repeat(2, 1fr); }
+      .membership-grid { grid-template-columns: 1fr; }
+      .tier-card.featured { transform: none; }
+      .tier-card.featured:hover { transform: translateY(-8px); }
+    }
+
+    @media (max-width: 768px) {
+      #nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .section-inner { padding: 0 24px; }
+      .courts-header { padding: 0 24px; }
+      .courts-scroll-wrap { padding: 0 24px; }
+      .court-card { flex: 0 0 280px; height: 380px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-stats { clip-path: none; }
+      .about-text { padding: 48px 24px; }
+      .about-stats { padding: 48px 24px; }
+      .coaches-grid { grid-template-columns: 1fr; }
+      .membership-grid { grid-template-columns: 1fr; max-width: 400px; }
+      #cursor-dot, #cursor-ring { display: none; }
+      body { cursor: auto; }
+      .footer-top { flex-direction: column; }
+      .footer-links { flex-direction: column; gap: 24px; }
+      .modal { padding: 36px 24px; }
+      .form-grid { grid-template-columns: 1fr; }
+      #about, #courts, #coaches, #membership, #booking-cta { padding: 80px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page Wipe -->
+  <div id="page-wipe"></div>
+
+  <!-- Custom Cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <a href="#hero" class="nav-logo">PADEL NOIR</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#courts">Courts</a></li>
+      <li><a href="#coaches">Coaches</a></li>
+      <li><a href="#membership">Membership</a></li>
+      <li><a href="#booking-cta">Book</a></li>
+    </ul>
+    <a href="#booking-cta" class="nav-cta">Book a Court</a>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <canvas id="hero-canvas-bg"></canvas>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-headline">
+        <span class="hero-word"><span>DOMINATE</span></span>
+        <span class="hero-word"><span>THE</span></span>
+        <span class="hero-word"><span>COURT</span></span>
+      </h1>
+      <p class="hero-sub">The ultimate padel experience — elite training, world-class courts.</p>
+      <a href="#booking-cta" class="hero-cta">Book Your Court</a>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="about-grid reveal">
+      <div class="about-stats">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number" data-target="12">0</div>
+            <div class="stat-label">Premium Courts</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="3000" data-suffix="+">0</div>
+            <div class="stat-label">Elite Members</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="24" data-suffix="/7">0</div>
+            <div class="stat-label">Always Open</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text">
+        <div class="section-label">Our Story</div>
+        <h2 class="about-heading">WHERE <em>ELITE</em><br>MEETS<br>OBSESSION</h2>
+        <p>PADEL NOIR was born from a singular belief: that the world's fastest-growing sport deserves a home as serious as the players who love it. We built this club for athletes who don't settle — for those who train at midnight, compete at dawn, and refuse to stop.</p>
+        <p>From our climate-controlled panoramic courts to our performance coaching programs, every detail has been engineered for one purpose: to make you better.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courts -->
+  <section id="courts">
+    <div class="courts-header reveal">
+      <div class="section-label">Our Facilities</div>
+      <h2 class="courts-heading">THE<br>COURTS</h2>
+    </div>
+    <div class="courts-scroll-wrap" id="courts-scroll">
+      <div class="court-card reveal reveal-delay-1">
+        <div class="court-bg"></div>
+        <div class="court-pattern"></div>
+        <div class="court-content">
+          <div class="court-number">01</div>
+          <div class="court-badge">Panoramic Glass</div>
+          <div class="court-name">COURT NOIR</div>
+        </div>
+        <button class="court-book-btn" onclick="openModal()">BOOK THIS COURT →</button>
+      </div>
+      <div class="court-card reveal reveal-delay-2">
+        <div class="court-bg"></div>
+        <div class="court-pattern"></div>
+        <div class="court-content">
+          <div class="court-number">02</div>
+          <div class="court-badge">Hardcourt Surface</div>
+          <div class="court-name">COURT BLEU</div>
+        </div>
+        <button class="court-book-btn" onclick="openModal()">BOOK THIS COURT →</button>
+      </div>
+      <div class="court-card reveal reveal-delay-3">
+        <div class="court-bg"></div>
+        <div class="court-pattern"></div>
+        <div class="court-content">
+          <div class="court-number">03</div>
+          <div class="court-badge">Artificial Turf</div>
+          <div class="court-name">COURT AMBER</div>
+        </div>
+        <button class="court-book-btn" onclick="openModal()">BOOK THIS COURT →</button>
+      </div>
+      <div class="court-card reveal reveal-delay-4">
+        <div class="court-bg"></div>
+        <div class="court-pattern"></div>
+        <div class="court-content">
+          <div class="court-number">04</div>
+          <div class="court-badge">Championship Grade</div>
+          <div class="court-name">COURT ELITE</div>
+        </div>
+        <button class="court-book-btn" onclick="openModal()">BOOK THIS COURT →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coaches -->
+  <section id="coaches">
+    <div class="section-inner">
+      <div class="section-label reveal">Meet the Experts</div>
+      <h2 class="coaches-heading reveal reveal-delay-1">WORLD-CLASS<br>COACHING</h2>
+      <div class="coaches-grid">
+        <div class="coach-card reveal reveal-delay-1">
+          <div class="coach-photo-wrap">
+            <div class="coach-avatar">MV</div>
+          </div>
+          <div class="coach-tag">Head Coach</div>
+          <div class="coach-name">MARCO VIDAL</div>
+          <p class="coach-bio">Former WPT top-30 player with 14 years of elite competition experience. Marco brings an analytical approach to the game, breaking down technique and tactical positioning with surgical precision.</p>
+        </div>
+        <div class="coach-card reveal reveal-delay-2">
+          <div class="coach-photo-wrap">
+            <div class="coach-avatar">SA</div>
+          </div>
+          <div class="coach-tag">Performance Coach</div>
+          <div class="coach-name">SOFIA ALLENDE</div>
+          <p class="coach-bio">Certified sports scientist and national champion. Sofia specialises in physical conditioning and on-court athleticism — turning good players into exceptional ones through data-driven training protocols.</p>
+        </div>
+        <div class="coach-card reveal reveal-delay-3">
+          <div class="coach-photo-wrap">
+            <div class="coach-avatar">KT</div>
+          </div>
+          <div class="coach-tag">Junior Academy</div>
+          <div class="coach-name">KARIM TAHIR</div>
+          <p class="coach-bio">Youth development specialist with a track record of producing national-level junior players. Karim's sessions blend competitive intensity with technical mastery to build the complete player.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Membership -->
+  <section id="membership">
+    <div class="section-inner">
+      <div class="section-label reveal">Membership Tiers</div>
+      <h2 class="membership-heading reveal reveal-delay-1">JOIN THE<br>ELITE</h2>
+      <p class="membership-sub reveal reveal-delay-2">Choose the plan that matches your ambition. All memberships include locker room access, equipment storage, and member events.</p>
+      <div class="membership-grid">
+        <div class="tier-card reveal reveal-delay-1">
+          <div class="tier-name">Challenger</div>
+          <div class="tier-price"><sup>€</sup>49</div>
+          <div class="tier-period">per month, billed monthly</div>
+          <div class="tier-divider"></div>
+          <ul class="tier-features">
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>4 court bookings/month</li>
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Access to all 12 courts</li>
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Locker room & showers</li>
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Member community app</li>
+          </ul>
+          <a class="tier-btn" href="#booking-cta">Get Started</a>
+        </div>
+        <div class="tier-card featured reveal reveal-delay-2">
+          <div class="tier-badge">Most Popular</div>
+          <div class="tier-name">Elite</div>
+          <div class="tier-price"><sup>€</sup>99</div>
+          <div class="tier-period">per month, billed annually</div>
+          <div class="tier-divider"></div>
+          <ul class="tier-features">
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Unlimited court bookings</li>
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>2 coaching sessions/month</li>
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Priority peak-hour access</li>
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Tournament entry included</li>
+          </ul>
+          <a class="tier-btn" href="#booking-cta">Get Started</a>
+        </div>
+        <div class="tier-card reveal reveal-delay-3">
+          <div class="tier-name">Noir Black</div>
+          <div class="tier-price"><sup>€</sup>199</div>
+          <div class="tier-period">per month, billed annually</div>
+          <div class="tier-divider"></div>
+          <ul class="tier-features">
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Everything in Elite</li>
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Unlimited private coaching</li>
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Concierge court booking</li>
+            <li><span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>VIP lounge & bar access</li>
+          </ul>
+          <a class="tier-btn" href="#booking-cta">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking CTA -->
+  <section id="booking-cta">
+    <div class="noise-bg"></div>
+    <div class="booking-cta-inner section-inner">
+      <h2 class="booking-giant-text reveal">
+        READY<br>TO <em>PLAY?</em>
+      </h2>
+      <p class="booking-sub reveal reveal-delay-1">Secure your court in under 60 seconds.</p>
+      <button class="booking-btn reveal reveal-delay-2" onclick="openModal()">RESERVE YOUR COURT</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo">PADEL NOIR</div>
+          <div class="footer-tagline">The ultimate padel experience.</div>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h5>Club</h5>
+            <ul>
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#courts">Our Courts</a></li>
+              <li><a href="#coaches">Coaches</a></li>
+              <li><a href="#membership">Membership</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Visit</h5>
+            <ul>
+              <li><a href="#">12 Rue du Sport, Paris</a></li>
+              <li><a href="#">Mon–Sun: 06:00–24:00</a></li>
+              <li><a href="#">+33 1 23 45 67 89</a></li>
+              <li><a href="#">hello@padelnoir.com</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="X / Twitter">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L2.25 2.25h6.945l4.273 5.649 4.776-5.649Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="YouTube">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+              <polygon points="9.75,15.02 15.5,12 9.75,8.98 9.75,15.02" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="TikTok">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">&copy; 2026 PADEL NOIR. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Cookie Settings</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Booking Modal -->
+  <div id="modal-overlay" role="dialog" aria-modal="true" aria-label="Book a Court">
+    <div class="modal" style="position:relative;">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+      <h2 class="modal-title">BOOK A COURT</h2>
+      <p class="modal-sub">Fill in your details and we'll confirm within minutes.</p>
+      <form onsubmit="handleBooking(event)">
+        <div class="form-group">
+          <label for="b-name">Full Name</label>
+          <input type="text" id="b-name" placeholder="Your full name" required />
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="b-date">Date</label>
+            <input type="date" id="b-date" required />
+          </div>
+          <div class="form-group">
+            <label for="b-time">Time Slot</label>
+            <select id="b-time" required>
+              <option value="">Select time</option>
+              <option>06:00 – 07:00</option>
+              <option>07:00 – 08:00</option>
+              <option>08:00 – 09:00</option>
+              <option>09:00 – 10:00</option>
+              <option>10:00 – 11:00</option>
+              <option>12:00 – 13:00</option>
+              <option>14:00 – 15:00</option>
+              <option>17:00 – 18:00</option>
+              <option>18:00 – 19:00</option>
+              <option>19:00 – 20:00</option>
+              <option>20:00 – 21:00</option>
+              <option>21:00 – 22:00</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="b-court">Court</label>
+          <select id="b-court" required>
+            <option value="">Select a court</option>
+            <option>Court Noir — Panoramic Glass</option>
+            <option>Court Bleu — Hardcourt</option>
+            <option>Court Amber — Artificial Turf</option>
+            <option>Court Elite — Championship</option>
+          </select>
+        </div>
+        <button type="submit" class="form-submit">CONFIRM BOOKING</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ── HERO CINEMATIC CANVAS ──
+    (function () {
+      const canvas = document.getElementById('hero-canvas-bg');
+      const ctx = canvas.getContext('2d');
+      let W, H;
+
+      function resize() {
+        W = canvas.width  = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+      }
+      resize();
+      window.addEventListener('resize', () => { resize(); buildCourt(); });
+
+      /* ---- COURT GEOMETRY (perspective top-down) ---- */
+      let court = {};
+      function buildCourt() {
+        const cx = W / 2, cy = H * 0.48;
+        const pw = W * 0.62, ph = H * 0.70;
+        court = {
+          cx, cy,
+          x1: cx - pw/2, x2: cx + pw/2,
+          y1: cy - ph/2, y2: cy + ph/2,
+          pw, ph,
+          netY: cy,
+          midX: cx,
+        };
+      }
+      buildCourt();
+
+      /* ---- BALL PHYSICS ---- */
+      const RALLY_DUR = 240; // frames per rally
+      let ball = { x: 0, y: 0, vx: 0, vy: 0, r: 7, trail: [] };
+      let rallyT = 0;
+      let phase = 0; // 0=left hits, 1=right hits
+
+      function serveBall() {
+        const c = court;
+        if (phase === 0) {
+          // Player on bottom-left hits toward top-right
+          ball.x = c.x1 + c.pw * 0.18 + Math.random() * c.pw * 0.1;
+          ball.y = c.y2 - c.ph * 0.18;
+          ball.vx =  (c.x2 - c.x1 - c.pw * 0.28) / RALLY_DUR + (Math.random()-0.5)*0.3;
+          ball.vy = -(c.y2 - c.y1 - c.ph * 0.20) / RALLY_DUR;
+        } else {
+          ball.x = c.x2 - c.pw * 0.18 - Math.random() * c.pw * 0.1;
+          ball.y = c.y1 + c.ph * 0.18;
+          ball.vx = -(c.x2 - c.x1 - c.pw * 0.28) / RALLY_DUR + (Math.random()-0.5)*0.3;
+          ball.vy =  (c.y2 - c.y1 - c.ph * 0.20) / RALLY_DUR;
+        }
+        ball.trail = [];
+        rallyT = 0;
+        phase = 1 - phase;
+      }
+      serveBall();
+
+      /* ---- PLAYERS ---- */
+      // 4 players: 2 per side
+      function makePlayer(tx, ty, col) {
+        return { tx, ty, x: tx, y: ty, col, swingT: -1 };
+      }
+      let players;
+      function buildPlayers() {
+        const c = court;
+        players = [
+          makePlayer(c.cx - c.pw*0.22, c.y2 - c.ph*0.12, 'A'), // bottom-left near
+          makePlayer(c.cx + c.pw*0.22, c.y2 - c.ph*0.12, 'B'), // bottom-right near
+          makePlayer(c.cx - c.pw*0.22, c.y1 + c.ph*0.12, 'C'), // top-left far
+          makePlayer(c.cx + c.pw*0.22, c.y1 + c.ph*0.12, 'D'), // top-right far
+        ];
+      }
+      buildPlayers();
+      window.addEventListener('resize', buildPlayers);
+
+      /* ---- PARTICLES (crowd dust) ---- */
+      const pts = Array.from({length: 60}, () => ({
+        x: Math.random(), y: Math.random(),
+        vx: (Math.random()-0.5)*0.00025,
+        vy: (Math.random()-0.5)*0.00025,
+        r: Math.random()*1.6+0.4,
+        a: Math.random()*0.35+0.1,
+        phase: Math.random()*Math.PI*2,
+      }));
+
+      /* ---- CAMERA SHAKE ---- */
+      let shake = 0;
+
+      /* ---- FLOODLIGHT FLICKER ---- */
+      let flicker = 1.0;
+      let flickerT = 0;
+
+      /* ---- DRAW HELPERS ---- */
+      function drawCourtLines(alpha) {
+        const c = court;
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = '#c8ff00';
+        ctx.shadowBlur  = 10;
+        ctx.shadowColor = 'rgba(200,255,0,0.45)';
+
+        function line(ax, ay, bx, by, lw) {
+          ctx.lineWidth = lw || 1.2;
+          ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+        }
+
+        // Outer rectangle
+        line(c.x1, c.y1, c.x2, c.y1);
+        line(c.x2, c.y1, c.x2, c.y2);
+        line(c.x2, c.y2, c.x1, c.y2);
+        line(c.x1, c.y2, c.x1, c.y1);
+
+        // Net line (thick)
+        ctx.strokeStyle = 'rgba(240,237,230,0.5)';
+        ctx.shadowColor = 'rgba(255,255,255,0.3)';
+        line(c.x1 - 18, c.netY, c.x2 + 18, c.netY, 2.5);
+
+        // Net posts
+        ctx.strokeStyle = 'rgba(240,237,230,0.3)';
+        ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(c.x1-18, c.netY-22); ctx.lineTo(c.x1-18, c.netY+22); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(c.x2+18, c.netY-22); ctx.lineTo(c.x2+18, c.netY+22); ctx.stroke();
+
+        // Net mesh lines
+        ctx.strokeStyle = 'rgba(240,237,230,0.10)';
+        ctx.lineWidth = 0.7;
+        for (let nx = c.x1; nx <= c.x2; nx += 24) {
+          ctx.beginPath(); ctx.moveTo(nx, c.netY-22); ctx.lineTo(nx, c.netY+22); ctx.stroke();
+        }
+
+        // Service lines
+        ctx.strokeStyle = '#c8ff00';
+        ctx.shadowColor = 'rgba(200,255,0,0.45)';
+        // Service box horizontal
+        const sy1 = c.netY - c.ph * 0.30;
+        const sy2 = c.netY + c.ph * 0.30;
+        line(c.x1, sy1, c.x2, sy1);
+        line(c.x1, sy2, c.x2, sy2);
+        // Centre vertical (service side only)
+        line(c.midX, c.y1, c.midX, sy1);
+        line(c.midX, sy2, c.midX, c.y2);
+
+        ctx.restore();
+      }
+
+      function drawFloodlights() {
+        const c = court;
+        const lights = [
+          [c.x1 - 30, c.y1 - 30],
+          [c.x2 + 30, c.y1 - 30],
+          [c.x1 - 30, c.y2 + 30],
+          [c.x2 + 30, c.y2 + 30],
+        ];
+        lights.forEach(([lx, ly]) => {
+          const lg = ctx.createRadialGradient(lx, ly, 0, lx, ly, Math.max(W, H) * 0.65);
+          lg.addColorStop(0,   `rgba(220,255,180,${0.12 * flicker})`);
+          lg.addColorStop(0.3, `rgba(180,220,100,${0.04 * flicker})`);
+          lg.addColorStop(1,    'transparent');
+          ctx.fillStyle = lg;
+          ctx.fillRect(0, 0, W, H);
+        });
+      }
+
+      function drawPlayer(p, t) {
+        const x = p.x, y = p.y;
+        const scale = 0.7 + (y - court.y1) / court.ph * 0.5; // perspective scale
+        const h  = 38 * scale;
+        const sw = 6  * scale;
+
+        // Shadow
+        ctx.save();
+        ctx.globalAlpha = 0.25;
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.ellipse(x, y + h*0.55, sw*2.5, sw*0.6, 0, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+
+        // Body silhouette
+        ctx.save();
+        ctx.globalAlpha = 0.82;
+
+        // Legs (animated running)
+        const legSwing = Math.sin(t * 0.22 + p.phase) * 0.28;
+        ctx.strokeStyle = '#1a1a1a';
+        ctx.lineWidth = sw * 0.9;
+        ctx.lineCap = 'round';
+
+        // Left leg
+        ctx.beginPath();
+        ctx.moveTo(x, y + h*0.25);
+        ctx.lineTo(x - sw*0.5 + legSwing*sw*2, y + h*0.55);
+        ctx.stroke();
+
+        // Right leg
+        ctx.beginPath();
+        ctx.moveTo(x, y + h*0.25);
+        ctx.lineTo(x + sw*0.5 - legSwing*sw*2, y + h*0.55);
+        ctx.stroke();
+
+        // Torso
+        ctx.fillStyle = p.swingT > 0 ? '#c8ff00' : '#e0e0e0';
+        ctx.beginPath();
+        ctx.roundRect(x - sw*0.7, y - h*0.3, sw*1.4, h*0.55, sw*0.5);
+        ctx.fill();
+
+        // Head
+        ctx.beginPath();
+        ctx.arc(x, y - h*0.35, sw*0.9, 0, Math.PI*2);
+        ctx.fill();
+
+        // Racket arm (swing animation)
+        const swingAngle = p.swingT > 0
+          ? Math.sin(p.swingT * Math.PI) * 1.4 - 0.7
+          : Math.sin(t * 0.15 + p.phase) * 0.25 - 0.3;
+        const armLen = h * 0.32;
+        const ax = x + Math.cos(swingAngle) * armLen * 1.2;
+        const ay = y - h*0.08 + Math.sin(swingAngle) * armLen;
+
+        ctx.strokeStyle = p.swingT > 0 ? '#c8ff00' : '#e0e0e0';
+        ctx.lineWidth = sw * 0.6;
+        ctx.beginPath();
+        ctx.moveTo(x, y - h*0.08);
+        ctx.lineTo(ax, ay);
+        ctx.stroke();
+
+        // Racket head
+        ctx.strokeStyle = p.swingT > 0 ? '#c8ff00' : '#aaa';
+        ctx.lineWidth = sw * 0.5;
+        ctx.beginPath();
+        ctx.ellipse(ax + Math.cos(swingAngle)*sw*1.2, ay + Math.sin(swingAngle)*sw*0.8,
+          sw*1.8, sw*1.1, swingAngle, 0, Math.PI*2);
+        ctx.stroke();
+
+        ctx.restore();
+
+        if (p.swingT > 0) p.swingT = Math.max(0, p.swingT - 0.04);
+      }
+
+      function drawBall() {
+        if (ball.trail.length < 2) return;
+
+        // Trail
+        for (let i = 1; i < ball.trail.length; i++) {
+          const a = i / ball.trail.length;
+          ctx.beginPath();
+          ctx.moveTo(ball.trail[i-1].x, ball.trail[i-1].y);
+          ctx.lineTo(ball.trail[i].x, ball.trail[i].y);
+          ctx.strokeStyle = `rgba(200,255,0,${a * 0.6})`;
+          ctx.lineWidth = a * ball.r * 1.6;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+
+        // Ball glow
+        const bg = ctx.createRadialGradient(ball.x, ball.y, 0, ball.x, ball.y, ball.r*3.5);
+        bg.addColorStop(0,   'rgba(200,255,0,0.4)');
+        bg.addColorStop(0.5, 'rgba(200,255,0,0.1)');
+        bg.addColorStop(1,    'transparent');
+        ctx.fillStyle = bg;
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r*3.5, 0, Math.PI*2);
+        ctx.fill();
+
+        // Ball core
+        ctx.fillStyle = '#d4ff1a';
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = 'rgba(200,255,0,0.9)';
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      /* ---- SCOREBOARD ---- */
+      let score = [0, 0];
+      function drawScoreboard() {
+        const sw = 180, sh = 52;
+        const sx = W - sw - 24, sy = 24;
+        ctx.save();
+        ctx.globalAlpha = 0.85;
+        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+        ctx.strokeStyle = 'rgba(200,255,0,0.4)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(sx, sy, sw, sh, 4);
+        ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = '#c8ff00';
+        ctx.font = "bold 11px 'DM Sans', sans-serif";
+        ctx.letterSpacing = '0.1em';
+        ctx.fillText('PADEL NOIR  LIVE', sx + 12, sy + 18);
+
+        ctx.fillStyle = '#f0ede6';
+        ctx.font = "bold 20px 'Bebas Neue', sans-serif";
+        ctx.fillText(`${score[0]}`, sx + 12,  sy + 42);
+        ctx.fillText('–',           sx + 80,  sy + 42);
+        ctx.fillText(`${score[1]}`, sx + 100, sy + 42);
+
+        // Live dot
+        ctx.fillStyle = '#ff3b3b';
+        ctx.beginPath();
+        ctx.arc(sx + sw - 14, sy + 14, 4, 0, Math.PI*2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      /* ---- MAIN LOOP ---- */
+      let t = 0;
+      function draw() {
+        t++;
+        rallyT++;
+
+        // Flicker
+        flickerT++;
+        if (flickerT > 180 + Math.random()*300) {
+          flicker = 0.85 + Math.random()*0.15;
+          flickerT = 0;
+        }
+
+        // Ball movement
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+        ball.trail.push({x: ball.x, y: ball.y});
+        if (ball.trail.length > 18) ball.trail.shift();
+
+        // Bounce off walls
+        const c = court;
+        if (ball.x < c.x1 + 5 || ball.x > c.x2 - 5) {
+          ball.vx *= -0.95;
+          ball.x = ball.x < c.x1 + 5 ? c.x1 + 5 : c.x2 - 5;
+          shake = 3;
+        }
+        if (ball.y < c.y1 + 5 || ball.y > c.y2 - 5) {
+          ball.vy *= -0.92;
+          ball.y = ball.y < c.y1 + 5 ? c.y1 + 5 : c.y2 - 5;
+          shake = 3;
+          score[ball.y > c.netY ? 0 : 1]++;
+          if (score[0] > 9) score[0] = 0;
+          if (score[1] > 9) score[1] = 0;
+          setTimeout(serveBall, 400);
+          rallyT = RALLY_DUR - 5;
+        }
+
+        // New rally
+        if (rallyT >= RALLY_DUR) serveBall();
+
+        // Players track ball + swing
+        const bp = [players[0], players[1]]; // bottom
+        const tp = [players[2], players[3]]; // top
+
+        // Nearest player moves toward ball
+        function chase(group, trackX, trackY) {
+          const near = group.reduce((a, b) =>
+            Math.hypot(a.tx - trackX, a.ty - trackY) < Math.hypot(b.tx - trackX, b.ty - trackY) ? a : b);
+          near.tx = Math.min(c.x2-30, Math.max(c.x1+30, trackX + (Math.random()-0.5)*40));
+          near.ty = Math.min(group[0].ty + 30, Math.max(group[0].ty - 30, trackY + (Math.random()-0.5)*20));
+          // Lerp
+          group.forEach(p => {
+            p.x += (p.tx - p.x) * 0.04;
+            p.y += (p.ty - p.y) * 0.04;
+          });
+          // Trigger swing when ball is close
+          if (Math.hypot(near.x - ball.x, near.y - ball.y) < 55 && near.swingT <= 0) {
+            near.swingT = 1.0;
+          }
+        }
+
+        if (ball.y > c.netY) chase(bp, ball.x, ball.y);
+        else                   chase(tp, ball.x, ball.y);
+
+        // Assign stable per-player phases
+        players.forEach((p, i) => { p.phase = i * 1.3; });
+
+        // Camera shake offset
+        let sx = 0, sy = 0;
+        if (shake > 0) {
+          sx = (Math.random()-0.5)*shake*3;
+          sy = (Math.random()-0.5)*shake*3;
+          shake -= 0.4;
+        }
+
+        ctx.save();
+        ctx.translate(sx, sy);
+
+        /* ---- BG ---- */
+        const bg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H)*0.75);
+        bg.addColorStop(0,   '#0c1a08');
+        bg.addColorStop(0.5, '#070e05');
+        bg.addColorStop(1,   '#020302');
+        ctx.fillStyle = bg;
+        ctx.fillRect(-6, -6, W+12, H+12);
+
+        /* ---- FLOODLIGHTS ---- */
+        drawFloodlights();
+
+        /* ---- COURT SURFACE ---- */
+        ctx.save();
+        ctx.globalAlpha = 0.06;
+        ctx.fillStyle = '#1a4020';
+        ctx.beginPath();
+        ctx.rect(c.x1, c.y1, c.pw, c.ph);
+        ctx.fill();
+        ctx.restore();
+
+        /* ---- COURT LINES ---- */
+        drawCourtLines(0.85);
+
+        /* ---- CROWD SILHOUETTE ---- */
+        ctx.save();
+        ctx.globalAlpha = 0.18;
+        ctx.fillStyle = '#0a0f0a';
+        // Row of head bumps above top baseline
+        for (let hx = c.x1 - 40; hx < c.x2 + 40; hx += 22) {
+          const jitter = Math.sin(hx * 0.7 + t * 0.01) * 3;
+          ctx.beginPath();
+          ctx.arc(hx, c.y1 - 18 + jitter, 9, 0, Math.PI*2);
+          ctx.fill();
+          ctx.fillRect(hx - 7, c.y1 - 18 + jitter, 14, 24);
+        }
+        ctx.restore();
+
+        /* ---- PLAYERS ---- */
+        players.forEach(p => drawPlayer(p, t));
+
+        /* ---- BALL ---- */
+        drawBall();
+
+        /* ---- FLOATING PARTICLES ---- */
+        pts.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0) p.x = 1; if (p.x > 1) p.x = 0;
+          if (p.y < 0) p.y = 1; if (p.y > 1) p.y = 0;
+          const pulse = (Math.sin(t * 0.03 + p.phase) * 0.5 + 0.5) * 0.4 + 0.1;
+          ctx.beginPath();
+          ctx.arc(p.x * W, p.y * H, p.r, 0, Math.PI*2);
+          ctx.fillStyle = `rgba(200,255,0,${pulse * p.a})`;
+          ctx.fill();
+        });
+
+        /* ---- VIGNETTE ---- */
+        const vig = ctx.createRadialGradient(W/2, H/2, H*0.18, W/2, H/2, W*0.82);
+        vig.addColorStop(0,  'transparent');
+        vig.addColorStop(1,  'rgba(0,0,0,0.78)');
+        ctx.fillStyle = vig;
+        ctx.fillRect(-6, -6, W+12, H+12);
+
+        ctx.restore();
+
+        /* ---- SCOREBOARD (outside shake) ---- */
+        drawScoreboard();
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+
+    // ── TOUCH DETECTION ──
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+      document.body.classList.add('touch-device');
+    }
+
+    // ── CUSTOM CURSOR ──
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mx = -100, my = -100, rx = -100, ry = -100;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left  = mx + 'px';
+      dot.style.top   = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, .court-card, .tier-card, .coach-card, .social-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // ── STICKY NAV ──
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── SCROLL REVEAL (IntersectionObserver) ──
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── COUNT-UP ANIMATION ──
+    const countObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const duration = 1600;
+          const start = performance.now();
+
+          function update(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(eased * target);
+            el.textContent = current.toLocaleString() + suffix;
+            if (progress < 1) requestAnimationFrame(update);
+          }
+          requestAnimationFrame(update);
+          countObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('[data-target]').forEach(el => countObserver.observe(el));
+
+    // ── HORIZONTAL SCROLL DRAG ──
+    const courtScroll = document.getElementById('courts-scroll');
+    let isDown = false, startX, scrollLeft;
+
+    courtScroll.addEventListener('mousedown', e => {
+      isDown = true;
+      startX = e.pageX - courtScroll.offsetLeft;
+      scrollLeft = courtScroll.scrollLeft;
+    });
+    courtScroll.addEventListener('mouseleave', () => isDown = false);
+    courtScroll.addEventListener('mouseup', () => isDown = false);
+    courtScroll.addEventListener('mousemove', e => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - courtScroll.offsetLeft;
+      courtScroll.scrollLeft = scrollLeft - (x - startX);
+    });
+
+    // ── MODAL ──
+    const overlay = document.getElementById('modal-overlay');
+
+    function openModal() {
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      const dateInput = document.getElementById('b-date');
+      if (!dateInput.value) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateInput.value = tomorrow.toISOString().split('T')[0];
+        dateInput.min = new Date().toISOString().split('T')[0];
+      }
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    function handleBooking(e) {
+      e.preventDefault();
+      const name  = document.getElementById('b-name').value;
+      const court = document.getElementById('b-court').value;
+      const date  = document.getElementById('b-date').value;
+      const time  = document.getElementById('b-time').value;
+
+      const btn = e.target.querySelector('.form-submit');
+      btn.textContent = 'BOOKING CONFIRMED ✓';
+      btn.style.background = 'rgba(200,255,0,0.8)';
+      btn.style.boxShadow = '0 0 40px rgba(200,255,0,0.4)';
+
+      setTimeout(() => {
+        closeModal();
+        btn.textContent = 'CONFIRM BOOKING';
+        btn.style.background = '';
+        btn.style.boxShadow = '';
+        e.target.reset();
+      }, 2000);
+    }
+
+    // ── TIER CARD VISIBILITY (for SVG check animation) ──
+    const tierObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.tier-card').forEach(el => tierObserver.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+/**
+ * Default editable site copy & structured data.
+ * Admin merges saved JSON over this on load so new keys ship safely.
+ */
+export const STORAGE_KEY = 'padel-pro-site-content-v1'
+
+export const DEFAULT_SITE_CONTENT = {
+  nav: {
+    brandStem: 'PADEL',
+    brandAccent: 'PRO',
+    bookCta: 'Book a Court',
+    links: [
+      { label: 'About', to: '/about' },
+      { label: 'Courts', to: '/courts' },
+      { label: 'Coaches', to: '/coaches' },
+      { label: 'Membership', to: '/membership' },
+    ],
+  },
+  home: {
+    hero: {
+      headline: 'DOMINATE THE COURT',
+      primaryCta: 'Book Your Court',
+      exploreCta: 'Explore the Club',
+      explorePath: '/about',
+      scrollLabel: 'SCROLL',
+      videoSrc: '/herosection_video.mp4',
+      posterSrc: '/herosection.jpg',
+      stats: [
+        { value: '2', label: 'Courts' },
+        { value: '3K+', label: 'Members' },
+        { value: '24/7', label: 'Open' },
+        { value: 'WPT', label: 'Certified' },
+      ],
+    },
+    ticker: {
+      items: [
+        '2 Premium Courts', '★', '3,000+ Elite Members', '★',
+        'Open 24 / 7', '★', 'Pro-Grade Surfaces', '★',
+        'Tournament Ready', '★', 'Padel Pro Paris', '★',
+      ],
+    },
+    showcase: {
+      eyebrow: 'Engineered for Performance',
+      titleLine1: 'TWO COURTS',
+      titleLine2: 'ONE OBSESSION',
+      titleAria: 'Two Courts, One Obsession',
+      finalText: 'Pristine. Panoramic. Pro.',
+      specs: [
+        { tag: 'PANORAMIC GLASS', value: '+360°', label: 'Visibility', x: '8%', y: '24%' },
+        { tag: 'CLIMATE-CONTROL', value: '22°C', label: 'Year Round', x: '74%', y: '18%' },
+        { tag: 'COURT SURFACE', value: '12MM', label: 'Cushion Layer', x: '6%', y: '70%' },
+        { tag: 'FLOODLIGHTS', value: '1200LX', label: 'TV-grade Lumens', x: '78%', y: '64%' },
+      ],
+    },
+    pillars: {
+      bgWord: 'PADEL · PRO · PADEL · PRO ·',
+      topLabel: 'THE THREE PILLARS',
+      headlineWords: ['BUILT', 'FOR', 'THE', 'OBSESSED.'],
+      accentWord: 'OBSESSED.',
+      pillars: [
+        { num: '01', word: 'PRECISION', copy: 'Every court engineered to ITF standards, every surface installed with sub-millimeter tolerance.' },
+        { num: '02', word: 'INTENSITY', copy: 'Floodlights calibrated for tournament-grade visibility. Climate held within ±2°C of optimal play.' },
+        { num: '03', word: 'COMMUNITY', copy: 'Three thousand obsessed members. Open round-the-clock. The club never sleeps because neither do you.' },
+      ],
+      metrics: [
+        { v: 2, s: '', l: 'Courts' },
+        { v: 3000, s: '+', l: 'Members' },
+        { v: 24, s: '/7', l: 'Open' },
+      ],
+    },
+    reel: {
+      topLabel: 'INSIDE THE CLUB',
+      topHint: 'SCROLL →',
+      panels: [
+        { idx: '01', tag: 'COMPETITION', title: 'Tournament Series', caption: 'Weekly ladders · monthly opens · annual championship.', accent: '#ff7a3d' },
+        { idx: '02', tag: 'RECOVERY', title: 'Recovery Lounge', caption: 'Cryo · sauna · physio — built into every membership.', accent: '#00d2ff' },
+        { idx: '03', tag: 'SOCIAL', title: 'The Members Bar', caption: 'Late kitchen · curated wines · padel on every screen.', accent: '#c8ff00' },
+      ],
+    },
+  },
+  pageHero: {
+    about: {
+      eyebrow: 'About',
+      title: 'WHERE ELITE MEETS OBSESSION',
+      accentWord: 'ELITE',
+      subtitle: "A members club born from a singular belief — that the world's fastest-growing sport deserves a home as serious as the players who love it.",
+    },
+    courts: {
+      eyebrow: 'Courts',
+      title: 'TWO PRISTINE COURTS',
+      accentWord: 'PRISTINE',
+      subtitle: 'Panoramic glass, climate-controlled hardcourts, championship turf — each surface engineered to host the highest level of play.',
+    },
+    coaches: {
+      eyebrow: 'Coaches',
+      title: 'WORLD-CLASS COACHING',
+      accentWord: 'WORLD-CLASS',
+      subtitle: 'Former tour professionals, certified strength specialists, and tactical analysts — every coach hand-picked to make you measurably better.',
+    },
+    membership: {
+      eyebrow: 'Membership',
+      title: 'CHOOSE YOUR LEVEL',
+      accentWord: 'YOUR',
+      subtitle: "Three tiers, one obsession. Whether you train weekly or live on court, there's a membership engineered for the way you play.",
+    },
+  },
+  sections: {
+    about: {
+      byTheNumbers: 'By the Numbers',
+      ourStory: 'Our Story',
+      splitHeadline: ['WHERE', 'ELITE', 'MEETS', 'OBSESSION'],
+      highlightWord: 'ELITE',
+      stats: [
+        { target: 2, suffix: '', label: 'Premium Courts' },
+        { target: 3000, suffix: '+', label: 'Elite Members' },
+        { target: 24, suffix: '/7', label: 'Always Open' },
+      ],
+      paragraph1: "PADEL PRO was born from a singular belief: the world's fastest-growing sport deserves a home as serious as the players who love it. We built this club for athletes who don't settle — those who train at midnight, compete at dawn, and refuse to stop.",
+      paragraph2: 'From climate-controlled panoramic courts to performance coaching programs, every detail has been engineered for one purpose: to make you better.',
+      courtsCta: 'View Our Courts →',
+    },
+    courts: {
+      sectionLabel: 'Our Facilities',
+      titleLine1: 'THE',
+      titleLine2: 'COURTS',
+      stripCaption: 'Drag to explore all four courts — each engineered for peak performance.',
+      bookLayer: 'BOOK THIS COURT →',
+      cards: [
+        { n: '01', name: 'COURT NOIR', badge: 'Panoramic Glass', color: '#0e1a0a', accent: '#1d320f' },
+        { n: '02', name: 'COURT BLEU', badge: 'Hardcourt Surface', color: '#080d18', accent: '#0d1630' },
+        { n: '03', name: 'COURT AMBER', badge: 'Artificial Turf', color: '#180e06', accent: '#2a1a08' },
+        { n: '04', name: 'COURT ELITE', badge: 'Championship Grade', color: '#100a18', accent: '#1c1028' },
+      ],
+    },
+    coaches: {
+      sectionLabel: 'Meet the Experts',
+      titleLine1: 'WORLD-CLASS',
+      titleLine2: 'COACHING',
+      list: [
+        {
+          initials: 'MV',
+          name: 'MARCO VIDAL',
+          tag: 'Head Coach',
+          nationality: '🇪🇸 Spain',
+          bio: 'Former WPT top-30 player with 14 years of elite competition. Marco breaks down technique and tactical positioning with surgical precision — turning raw ability into elite performance.',
+        },
+        {
+          initials: 'SA',
+          name: 'SOFIA ALLENDE',
+          tag: 'Performance Coach',
+          nationality: '🇦🇷 Argentina',
+          bio: 'Certified sports scientist and national champion. Sofia specialises in physical conditioning and data-driven athleticism — turning good players into exceptional ones.',
+        },
+        {
+          initials: 'KT',
+          name: 'KARIM TAHIR',
+          tag: 'Junior Academy',
+          nationality: '🇫🇷 France',
+          bio: 'Youth development specialist with a track record of producing national-level juniors. Karim blends competitive intensity with technical mastery to build the complete player.',
+        },
+      ],
+    },
+    membership: {
+      sectionLabel: 'Membership Tiers',
+      titleLine1: 'JOIN THE',
+      titleLine2: 'ELITE',
+      intro: 'Choose the plan that matches your ambition. All memberships include locker room access, equipment storage, and exclusive member events.',
+      tierCta: 'Get Started',
+      tiers: [
+        {
+          name: 'Challenger',
+          price: '49',
+          period: '/mo · billed monthly',
+          features: ['4 court bookings / month', 'Full access to both courts', 'Locker room & showers', 'Member app & community'],
+          featured: false,
+        },
+        {
+          name: 'Elite',
+          price: '99',
+          period: '/mo · billed annually',
+          features: ['Unlimited court bookings', '2 guest passes / month', 'Priority peak-hour access', 'Tournament entries included'],
+          featured: true,
+          badge: 'Most Popular',
+        },
+        {
+          name: 'Noir Black',
+          price: '199',
+          period: '/mo · billed annually',
+          features: ['Everything in Elite', 'Private court blocks included', 'Concierge court reservation', 'VIP lounge & bar access'],
+          featured: false,
+        },
+      ],
+    },
+    bookingCta: {
+      words: ['READY', 'TO', 'PLAY?'],
+      accentWord: 'PLAY?',
+      sub: 'Secure your court in under 60 seconds.',
+      button: 'RESERVE YOUR COURT',
+    },
+    footer: {
+      tagline: 'The ultimate padel experience.',
+      clubColumnTitle: 'Club',
+      clubLinks: [
+        { label: 'About Us', to: '/about' },
+        { label: 'Our Courts', to: '/courts' },
+        { label: 'Coaches', to: '/coaches' },
+        { label: 'Membership', to: '/membership' },
+      ],
+      contactColumnTitle: 'Contact',
+      contactLines: [
+        { label: '12 Rue du Sport, Paris', href: '#' },
+        { label: 'Mon–Sun 06:00–24:00', href: '#' },
+        { label: '+33 1 23 45 67 89', href: '#' },
+        { label: 'hello@padelpro.com', href: '#' },
+      ],
+      followLabel: 'Follow Us',
+      copyright: '© 2026 PADEL PRO. All rights reserved.',
+      legal: ['Privacy', 'Terms', 'Cookies'],
+    },
+    modal: {
+      brand: 'PADEL PRO',
+      title: 'BOOK A COURT',
+      subtitle: "Fill in your details — we'll confirm within minutes.",
+      nameLabel: 'Full Name',
+      namePlaceholder: 'Your full name',
+      emailLabel: 'Email',
+      emailPlaceholder: 'you@example.com',
+      dateLabel: 'Date',
+      timeLabel: 'Time',
+      timePlaceholder: 'Select time',
+      courtLabel: 'Court',
+      courtPlaceholder: 'Select a court',
+      submit: 'SUBMIT BOOKING REQUEST',
+      pendingTitle: 'REQUEST RECEIVED',
+      pendingBody: 'Your booking is pending approval. You will receive a confirmation email at the address you provided once staff approves it.',
+      submitError: 'Something went wrong. Please try again or contact the club.',
+      successTitle: 'COURT RESERVED!',
+      successBody: "You'll receive a confirmation shortly.\nSee you on the court.",
+      courts: [
+        'Court Noir — Panoramic Glass',
+        'Court Bleu — Hardcourt',
+        'Court Amber — Artificial Turf',
+        'Court Elite — Championship',
+      ],
+      timeslots: [
+        '06:00–07:00', '07:00–08:00', '08:00–09:00', '09:00–10:00', '10:00–11:00', '12:00–13:00',
+        '14:00–15:00', '17:00–18:00', '18:00–19:00', '19:00–20:00', '20:00–21:00', '21:00–22:00',
+      ],
+    },
+  },
+}
