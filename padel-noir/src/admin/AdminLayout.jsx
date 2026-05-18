@@ -51,8 +51,8 @@ export default function AdminLayout() {
 
   if (!authed) {
     return (
-      <div style={shell}>
-        <div style={card}>
+      <div className="admin-shell" style={shell}>
+        <div className="admin-login-card" style={card}>
           <h1 style={h1}>Padel Pro — Admin</h1>
           {!envPwd ? (
             <p style={hint}>
@@ -81,8 +81,8 @@ export default function AdminLayout() {
   }
 
   return (
-    <div style={shell}>
-      <aside style={aside}>
+    <div className="admin-shell" style={shell}>
+      <aside className="admin-aside" style={aside}>
         <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 28, letterSpacing: '.08em', marginBottom: 8 }}>
           PADEL <span style={{ color: '#c8ff00' }}>PRO</span>
         </div>
@@ -107,7 +107,7 @@ export default function AdminLayout() {
           ) : null}
         </div>
       </aside>
-      <main style={main}>
+      <main className="admin-main" style={main}>
         <Outlet />
       </main>
     </div>

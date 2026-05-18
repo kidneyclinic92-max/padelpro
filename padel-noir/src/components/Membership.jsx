@@ -32,6 +32,7 @@ function TierCard({ tier, delay, onBook, ctaLabel }) {
       animate={inView ? { opacity: 1, y: tier.featured ? -16 : 0 } : {}}
       transition={{ duration: .85, delay, ease: [.16,1,.3,1] }}
       whileHover={{ y: tier.featured ? -26 : -10 }}
+      className={tier.featured ? 'membership-card-featured' : undefined}
       style={{
         ...cardBase,
         border: tier.featured ? '1px solid #c8ff00' : '1px solid rgba(240,237,230,.07)',
@@ -98,7 +99,7 @@ export default function Membership({ onBook }) {
   const inView    = useInView(headerRef, { once: true, margin: '-80px' })
 
   return (
-    <section id="membership" style={{ padding: '130px 0', background: '#0a0a0a', position: 'relative', overflow: 'hidden' }}>
+    <section id="membership" className="site-section" style={{ padding: '130px 0', background: '#0a0a0a', position: 'relative', overflow: 'hidden' }}>
       {/* Decorative grid */}
       <div style={bgGrid} aria-hidden />
 
@@ -118,7 +119,7 @@ export default function Membership({ onBook }) {
           </p>
         </motion.div>
 
-        <div style={gridStyle}>
+        <div className="membership-grid-inner" style={gridStyle}>
           {TIERS.map((t, i) => (
             <TierCard key={t.name} tier={t} delay={i * .12} onBook={onBook} ctaLabel={mem.tierCta} />
           ))}

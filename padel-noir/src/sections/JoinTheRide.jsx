@@ -28,7 +28,7 @@ export default function JoinTheRide({ onBook }) {
       <motion.div style={{ ...glow, scale: glowScale }} aria-hidden />
 
       {/* Top label */}
-      <div style={topRow}>
+      <div className="join-top-row" style={topRow}>
         <span style={smallLabel}>
           <span style={dash} />
           THE NEXT MOVE
@@ -44,7 +44,7 @@ export default function JoinTheRide({ onBook }) {
         {Array.from({ length: 4 }).map((_, r) => (
           <span key={r} style={marqueeRow}>
             {MARQUEE_WORDS.map((w, i) => (
-              <span key={`${r}-${i}`} style={w === '★' ? marqueeStar : marqueeWord}>{w}</span>
+              <span key={`${r}-${i}`} className={w === '★' ? undefined : 'join-marquee-word'} style={w === '★' ? marqueeStar : marqueeWord}>{w}</span>
             ))}
           </span>
         ))}
@@ -77,14 +77,14 @@ export default function JoinTheRide({ onBook }) {
         {Array.from({ length: 4 }).map((_, r) => (
           <span key={r} style={marqueeRow}>
             {MARQUEE_WORDS.map((w, i) => (
-              <span key={`${r}-${i}`} style={w === '★' ? marqueeStar : marqueeWord}>{w}</span>
+              <span key={`${r}-${i}`} className={w === '★' ? undefined : 'join-marquee-word'} style={w === '★' ? marqueeStar : marqueeWord}>{w}</span>
             ))}
           </span>
         ))}
       </motion.div>
 
       {/* Bottom metric row */}
-      <div style={bottomRow}>
+      <div className="join-bottom-row" style={bottomRow}>
         <div style={bottomItem}>
           <span style={bottomVal}>06:00–24:00</span>
           <span style={bottomLab}>Hours · Mon–Sun</span>

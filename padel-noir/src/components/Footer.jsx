@@ -19,22 +19,23 @@ export default function Footer() {
 
   return (
     <footer style={footerStyle}>
-      <div ref={ref} style={{ maxWidth: 1280, margin: '0 auto', padding: '0 56px' }}>
+      <div ref={ref} className="footer-inner">
         {/* Top row */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: .7 }}
+          className="footer-top"
           style={topRow}
         >
-          <div>
-            <div style={logoStyle}>
+          <motion.div>
+            <div className="footer-logo" style={logoStyle}>
               {nav.brandStem}<span style={{ color:'#c8ff00' }}>{nav.brandAccent}</span>
             </div>
             <div style={tagline}>{f.tagline}</div>
-          </div>
+          </motion.div>
 
-          <div style={colWrap}>
+          <div className="footer-cols" style={colWrap}>
             <FooterCol title={f.clubColumnTitle} links={f.clubLinks.map((l) => [l.label, l.to])} internal />
             <FooterCol title={f.contactColumnTitle} links={f.contactLines.map((l) => [l.label, l.href])} />
           </div>
@@ -67,7 +68,7 @@ export default function Footer() {
         />
 
         {/* Bottom */}
-        <div style={bottomRow}>
+        <div className="footer-bottom" style={bottomRow}>
           <span style={copy}>{f.copyright}</span>
           <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
             {(f.legal || []).map((l) => (

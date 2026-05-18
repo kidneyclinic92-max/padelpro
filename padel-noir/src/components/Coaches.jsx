@@ -99,7 +99,7 @@ export default function Coaches() {
   const inView    = useInView(headerRef, { once: true, margin: '-80px' })
 
   return (
-    <section id="coaches" style={sectionStyle} className="grain">
+    <section id="coaches" style={sectionStyle} className="grain site-section">
       <div className="section-inner">
         <motion.div
           ref={headerRef}
@@ -113,9 +113,9 @@ export default function Coaches() {
           </h2>
         </motion.div>
 
-        <div style={gridStyle}>
+        <motion.div className="coaches-grid-inner" style={gridStyle}>
           {COACHES.map((c, i) => <CoachCard key={c.name} coach={c} delay={i * .13} />)}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

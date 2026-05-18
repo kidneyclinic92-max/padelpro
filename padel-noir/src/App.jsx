@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -47,6 +47,12 @@ function PublicApp() {
   const [wipeDone,  setWipeDone]  = useState(false)
   const open  = () => setModalOpen(true)
   const close = () => setModalOpen(false)
+
+  useEffect(() => {
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    if (isTouch) document.body.classList.add('touch')
+    return () => document.body.classList.remove('touch')
+  }, [])
 
   return (
     <SmoothScroll>

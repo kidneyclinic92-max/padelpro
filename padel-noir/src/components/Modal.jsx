@@ -77,11 +77,13 @@ export default function Modal({ open, onClose }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: .35 }}
+          className="modal-overlay"
           style={overlayStyle}
           onClick={(e) => e.target === e.currentTarget && onClose()}
         >
           <motion.div
             key="panel"
+            className="modal-panel"
             initial={{ opacity: 0, y: 50, scale: .95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: .97 }}
@@ -128,7 +130,7 @@ export default function Modal({ open, onClose }) {
               ) : (
                 <motion.div key="form" initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
                   <p style={eyebrow}>{m.brand}</p>
-                  <h2 style={titleStyle}>{m.title}</h2>
+                  <h2 className="modal-title" style={titleStyle}>{m.title}</h2>
                   <p style={subtitleStyle}>{m.subtitle}</p>
 
                   <form onSubmit={submit} style={{ marginTop: 32 }}>
@@ -157,7 +159,7 @@ export default function Modal({ open, onClose }) {
                       />
                     </Field>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                    <div className="modal-form-row">
                       <Field label={m.dateLabel}>
                         <input
                           style={inputStyle}

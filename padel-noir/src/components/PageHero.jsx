@@ -23,6 +23,7 @@ export default function PageHero({ eyebrow, title, subtitle, accentWord }) {
       {/* Floating lime accent square */}
       <motion.div
         aria-hidden
+        className="page-hero-accent"
         style={accentBlock}
         animate={{ rotate: [0, 360] }}
         transition={{ duration: 60, ease: 'linear', repeat: Infinity }}

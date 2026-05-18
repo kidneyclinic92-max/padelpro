@@ -321,6 +321,7 @@ export default function Hero({ onBook }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: .8, delay: 1.42 }}
+          className="hero-cta-row"
           style={ctaRow}
         >
           <MagneticButton onClick={onBook} style={ctaPrimary}>
@@ -356,13 +357,14 @@ export default function Hero({ onBook }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.7, duration: .9 }}
+        className="hero-stat-row"
         style={statRow}
       >
         {(h.stats || []).map(({ value, label }) => (
-          <div key={label} style={statItem}>
+          <motion.div key={label} className="hero-stat-item" style={statItem}>
             <span style={statVal}>{value}</span>
             <span style={statLabel}>{label}</span>
-          </div>
+          </motion.div>
         ))}
       </motion.div>
     </section>

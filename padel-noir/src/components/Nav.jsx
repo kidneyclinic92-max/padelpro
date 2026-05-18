@@ -24,6 +24,7 @@ export default function Nav({ onBook }) {
   return (
     <>
       <motion.nav
+        className="site-nav"
         initial={{ y: -88, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: .8, delay: .8, ease: [.16,1,.3,1] }}
@@ -50,6 +51,7 @@ export default function Nav({ onBook }) {
 
         {/* Desktop CTA */}
         <motion.button
+          className="nav-desktop-cta"
           onClick={onBook}
           data-hover
           style={ctaStyle}
@@ -81,6 +83,7 @@ export default function Nav({ onBook }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: .3 }}
+            className="mobile-menu"
             style={mobileMenu}
           >
             {links.map((l, i) => (
@@ -92,6 +95,7 @@ export default function Nav({ onBook }) {
               >
                 <RouterNavLink
                   to={l.to}
+                  className="mob-nav-link"
                   style={({ isActive }) => ({
                     ...mobLink,
                     color: isActive ? '#c8ff00' : '#f0ede6',

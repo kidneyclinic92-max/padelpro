@@ -50,13 +50,14 @@ export default function About() {
       {/* Subtle parallax BG accent */}
       <motion.div style={{ ...bgAccent, y: bgY }} aria-hidden />
 
-      <div style={{ ...innerGrid, position: 'relative' }}>
+      <motion.div className="about-inner-grid" style={{ ...innerGrid, position: 'relative' }}>
         {/* ── LEFT: Stat cards ── */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: .9, ease: [.16,1,.3,1] }}
+          className="about-stats-panel"
           style={statsPanel}
         >
           <motion.div
@@ -70,7 +71,7 @@ export default function About() {
             {ab.byTheNumbers}
           </motion.div>
 
-          <div style={statsGrid}>
+          <motion.div className="about-stats-grid" style={statsGrid}>
             {STATS.map((s, i) => (
               <motion.div
                 key={s.label}
@@ -107,12 +108,12 @@ export default function About() {
                 />
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </motion.div>
 
         {/* ── RIGHT: Text ── */}
-        <div ref={textRef} style={textPanel}>
+        <div ref={textRef} className="about-text-panel" style={textPanel}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={textInView ? { opacity: 1, y: 0 } : {}}
@@ -170,7 +171,7 @@ export default function About() {
             </Link>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

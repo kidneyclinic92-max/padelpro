@@ -10,9 +10,13 @@
   --mid:       #0f0f0f;
   --mid2:      #141414;
   --border:    rgba(240,237,230,0.08);
+  --page-pad:  clamp(20px, 5vw, 56px);
 }
 
-html { font-size: 16px; }
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
 
 /* Lenis recommended baseline */
 html.lenis, html.lenis body { height: auto; }
@@ -35,8 +39,10 @@ h1,h2,h3,h4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: .04em; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; }
 
+img, video { max-width: 100%; height: auto; }
+
 /* Scrollbar */
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: var(--charcoal); }
 ::-webkit-scrollbar-thumb { background: var(--lime); border-radius: 99px; }
 
@@ -44,7 +50,7 @@ button { font-family: inherit; cursor: pointer; }
 .section-inner {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 56px;
+  padding: 0 var(--page-pad);
 }
 .section-label {
   font-size: 11px;
@@ -64,7 +70,12 @@ button { font-family: inherit; cursor: pointer; }
   flex-shrink: 0;
 }
 
-/* Grain noise overlay (applied via pseudo on each section) */
+.site-section {
+  padding-top: clamp(72px, 14vw, 130px) !important;
+  padding-bottom: clamp(72px, 14vw, 130px) !important;
+}
+
+/* Grain noise overlay */
 .grain::after {
   content: '';
   position: absolute;
@@ -76,42 +87,288 @@ button { font-family: inherit; cursor: pointer; }
   z-index: 10;
 }
 
-/* About section (dark): subtle film grain */
 #about.grain::after {
   opacity: .045;
   mix-blend-mode: soft-light;
   z-index: 1;
 }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  .coaches-grid-inner  { grid-template-columns: 1fr 1fr !important; }
-  .membership-grid-inner { grid-template-columns: 1fr !important; max-width: 440px; }
+/* ── NAV ── */
+.site-nav {
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
 }
 
+.nav-hamburger { display: none !important; }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ── GRIDS (class hooks for responsive overrides) ── */
+.coaches-grid-inner,
+.membership-grid-inner {
+  display: grid;
+  gap: 22px;
+}
+
+.coaches-grid-inner { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.membership-grid-inner { grid-template-columns: repeat(3, 1fr); align-items: start; }
+
+/* ── COURTS STRIP ── */
+.courts-strip {
+  padding-left: var(--page-pad);
+  padding-right: var(--page-pad);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  display: flex;
+  gap: 20px;
+}
+.courts-strip::-webkit-scrollbar { display: none; }
+
+.court-card {
+  flex: 0 0 min(360px, 85vw);
+  scroll-snap-align: start;
+}
+
+/* ── MODAL ── */
+.modal-overlay {
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+           max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  align-items: flex-end;
+}
+
+.modal-panel {
+  max-height: min(92vh, 92dvh);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── FOOTER ── */
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+}
+
+.footer-cols {
+  display: flex;
+  gap: 56px;
+}
+
+/* ── PILLARS ── */
+.pillars-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+}
+
+.pillar-row {
+  display: grid;
+  grid-template-columns: auto 1fr 2fr;
+  gap: clamp(24px, 4vw, 72px);
+  align-items: baseline;
+}
+
+.pillars-metric-row {
+  display: grid;
+  gap: 24px;
+}
+
+/* ── JOIN THE RIDE ── */
+.join-bottom-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.join-top-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0 var(--page-pad);
+}
+
+/* ── ADMIN ── */
+.admin-shell { min-height: 100vh; min-height: 100dvh; }
+.admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 8px; }
+.admin-table-wrap table { min-width: 640px; }
+
+/* ── RESPONSIVE: TABLET ── */
+@media (max-width: 900px) {
+  .coaches-grid-inner { grid-template-columns: repeat(2, 1fr) !important; }
+  .membership-grid-inner {
+    grid-template-columns: 1fr !important;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+  .membership-card-featured { transform: none !important; }
+  .pillar-row { grid-template-columns: auto 1fr !important; }
+  .pillar-row .pillar-copy { grid-column: 1 / -1; }
+  .pillars-metric-row { grid-template-columns: repeat(3, 1fr) !important; }
+  .join-bottom-row { grid-template-columns: 1fr 1fr !important; }
+  .footer-cols { gap: 32px; }
+  .page-hero-accent { display: none !important; }
+}
+
+/* ── RESPONSIVE: MOBILE ── */
 @media (max-width: 768px) {
-  .section-inner { padding: 0 24px; }
-  nav .nav-desktop-links { display: none !important; }
-  nav .nav-hamburger      { display: flex !important; }
+  body { cursor: auto; }
 
-  /* About grid stack */
+  .section-inner,
+  .footer-inner,
+  .pillars-inner,
+  .courts-header-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .site-nav {
+    height: 64px !important;
+    padding-left: 20px !important;
+    padding-right: 16px !important;
+  }
+
+  nav .nav-desktop-links,
+  nav .nav-desktop-cta { display: none !important; }
+  nav .nav-hamburger { display: flex !important; }
+
+  .mobile-menu {
+    top: 64px !important;
+    padding-bottom: max(40px, env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Hero */
+  .hero-headline {
+    font-size: clamp(36px, 11vw, 60px) !important;
+    flex-wrap: wrap !important;
+    white-space: normal !important;
+  }
+  .hero-content {
+    left: 20px !important;
+    right: 20px !important;
+    bottom: clamp(200px, 28vh, 240px) !important;
+    max-width: none !important;
+  }
+  .hero-cta-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    margin-top: 24px !important;
+  }
+  .hero-cta-row button {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+  .hero-scroll { display: none !important; }
+  .hero-stat-row {
+    overflow-x: auto;
+    justify-content: flex-start !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .hero-stat-row::-webkit-scrollbar { display: none; }
+  .hero-stat-item {
+    padding: 14px 28px !important;
+    flex-shrink: 0;
+    min-width: 120px;
+  }
+
+  /* About */
   .about-inner-grid { grid-template-columns: 1fr !important; }
-  .about-stats-panel { clip-path: none !important; padding: 64px 24px !important; }
-  .about-text-panel  { padding: 64px 24px !important; }
-
-  /* Hero stat bar scrollable */
-  .hero-stat-row { overflow-x: auto; justify-content: flex-start !important; }
-  .hero-stat-item { padding: 16px 32px !important; flex-shrink: 0; }
-
-  /* About: stats column stacks above text on mobile, single-col cards */
+  .about-stats-panel { padding: 48px 20px !important; }
+  .about-text-panel { padding: 48px 20px 64px !important; }
   .about-stats-grid { grid-template-columns: 1fr 1fr !important; }
 
-  /* Hero headline stack on mobile so single line still fits */
-  .hero-headline { font-size: clamp(36px, 11vw, 60px) !important; flex-wrap: wrap !important; white-space: normal !important; }
-  .hero-content  { left: 24px !important; bottom: 160px !important; max-width: 90vw !important; }
-  .hero-scroll   { display: none !important; }
+  /* Coaches / membership */
+  .coaches-grid-inner { grid-template-columns: 1fr !important; }
+  .membership-grid-inner { grid-template-columns: 1fr !important; max-width: none; }
 
-  /* Coaches / membership single col */
-  .coaches-grid-inner    { grid-template-columns: 1fr !important; }
-  .membership-grid-inner { grid-template-columns: 1fr !important; }
+  /* Courts */
+  .courts-strip {
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: default;
+  }
+  .court-card {
+    flex: 0 0 min(300px, 88vw);
+    height: 400px !important;
+  }
+  .courts-fade-right { width: 48px !important; }
+
+  /* Pillars */
+  .pillar-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 28px 0 !important;
+  }
+  .pillars-metric-row {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Join */
+  .join-bottom-row { grid-template-columns: 1fr !important; }
+  .join-marquee-word { font-size: clamp(48px, 14vw, 80px) !important; }
+
+  /* Modal */
+  .modal-overlay { align-items: flex-end; }
+  .modal-panel {
+    padding: 32px 20px 28px !important;
+    border-radius: 12px 12px 0 0 !important;
+    max-width: 100% !important;
+  }
+  .modal-title { font-size: clamp(36px, 10vw, 52px) !important; }
+  .modal-form-row { grid-template-columns: 1fr !important; }
+
+  /* Footer */
+  .footer-top { flex-direction: column !important; gap: 32px !important; }
+  .footer-cols {
+    flex-direction: column !important;
+    gap: 28px !important;
+    width: 100%;
+  }
+  .footer-logo { font-size: 30px !important; }
+  .footer-bottom {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  /* Admin */
+  .admin-shell { flex-direction: column !important; }
+  .admin-aside {
+    width: 100% !important;
+    height: auto !important;
+    position: relative !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(240,237,230,.08);
+    padding: 20px 16px !important;
+  }
+  .admin-main {
+    padding: 20px 16px 48px !important;
+    max-width: 100% !important;
+  }
+  .admin-login-card {
+    margin: 40px 16px !important;
+    padding: 28px 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-stats-grid { grid-template-columns: 1fr !important; }
+  .hero-stat-item { min-width: 100px; padding: 12px 20px !important; }
+  .mob-nav-link { font-size: 28px !important; }
 }

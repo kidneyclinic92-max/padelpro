@@ -28,6 +28,7 @@ function CourtCard({ court, onBook, delay, bookLabel }) {
       initial={{ opacity: 0, y: 56 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: .8, delay, ease: [.16,1,.3,1] }}
+      className="court-card"
       style={{
         ...cardStyle,
         background: `linear-gradient(160deg, ${court.accent} 0%, ${court.color} 100%)`,
@@ -93,7 +94,7 @@ export default function Courts({ onBook }) {
   }
 
   return (
-    <section id="courts" style={{ padding: '130px 0', background: '#0a0a0a', position: 'relative', overflow: 'hidden' }}>
+    <section id="courts" className="site-section" style={{ padding: '130px 0', background: '#0a0a0a', position: 'relative', overflow: 'hidden' }}>
       {/* Background grid lines */}
       <div style={bgGrid} aria-hidden />
 
@@ -102,7 +103,8 @@ export default function Courts({ onBook }) {
         initial={{ opacity: 0, y: 32 }}
         animate={headerInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: .7, ease: [.4,0,.2,1] }}
-        style={{ maxWidth: 1280, margin: '0 auto 52px', padding: '0 56px' }}
+        className="section-inner courts-header-inner"
+        style={{ margin: '0 auto 52px' }}
       >
         <div className="section-label">{ct.sectionLabel}</div>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
@@ -121,6 +123,7 @@ export default function Courts({ onBook }) {
         onMouseLeave={onUp}
         onMouseUp={onUp}
         onMouseMove={onMove}
+        className="courts-strip"
         style={stripStyle}
       >
         {COURTS.map((c, i) => (
@@ -131,7 +134,7 @@ export default function Courts({ onBook }) {
       </div>
 
       {/* Scroll hint fade */}
-      <div style={fadeRight} aria-hidden />
+      <div className="courts-fade-right" style={fadeRight} aria-hidden />
     </section>
   )
 }

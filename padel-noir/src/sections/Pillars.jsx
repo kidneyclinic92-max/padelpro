@@ -57,7 +57,7 @@ export default function Pillars() {
         {pl.bgWord}
       </motion.div>
 
-      <div style={inner}>
+      <div className="pillars-inner" style={inner}>
         {/* Top label */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -99,11 +99,12 @@ export default function Pillars() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: .9, delay: i * .12, ease: [.16,1,.3,1] }}
+              className="pillar-row"
               style={pillarRow}
             >
               <div style={pillarNum}>{row.num}</div>
               <h3 style={pillarWord}>{row.word}</h3>
-              <p style={pillarCopy}>{row.copy}</p>
+              <p className="pillar-copy" style={pillarCopy}>{row.copy}</p>
               <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
@@ -116,7 +117,7 @@ export default function Pillars() {
         </div>
 
         {/* Bottom metric row */}
-        <div style={{ ...metricRow, gridTemplateColumns: `repeat(${metrics.length}, 1fr)` }}>
+        <div className="pillars-metric-row" style={{ ...metricRow, gridTemplateColumns: `repeat(${metrics.length}, 1fr)` }}>
           {metrics.map((m, i) => (
             <motion.div
               key={m.l}

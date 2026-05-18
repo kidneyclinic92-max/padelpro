@@ -128,6 +128,7 @@ export default function AdminBookings() {
       {pending.length === 0 && !loading ? (
         <p style={{ color: 'rgba(240,237,230,.4)' }}>No pending bookings.</p>
       ) : (
+        <div className="admin-table-wrap">
         <table style={table}>
           <thead>
             <tr>
@@ -163,12 +164,14 @@ export default function AdminBookings() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
 
       <h2 style={{ ...h2, marginTop: 48 }}>Approved ({done.length})</h2>
       {done.length === 0 ? (
         <p style={{ color: 'rgba(240,237,230,.4)' }}>None yet.</p>
       ) : (
+        <div className="admin-table-wrap">
         <table style={table}>
           <thead>
             <tr>
@@ -193,6 +196,7 @@ export default function AdminBookings() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   )
