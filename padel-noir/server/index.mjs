@@ -18,7 +18,8 @@ const padelProRoot = path.join(__dirname, '..', '..')
 loadEnv({ path: path.join(padelProRoot, '.env') })
 loadEnv({ path: path.join(padelNoirRoot, '.env') })
 
-const PORT = Number(process.env.BOOKING_API_PORT || 3001)
+const PORT = Number(process.env.PORT || process.env.BOOKING_API_PORT || 3001)
+const DIST_DIR = path.join(padelNoirRoot, 'dist')
 const DATA_DIR = path.join(__dirname, 'data')
 const DATA_FILE = path.join(DATA_DIR, 'bookings.json')
 const ADMIN_KEY = process.env.ADMIN_API_KEY || ''
@@ -179,8 +180,20 @@ app.post('/api/bookings/:id/approve', requireAdmin, async (req, res) => {
   res.json({ ok: true, booking: list[idx] })
 })
 
-app.listen(PORT, () => {
-  console.log(`Booking API http://127.0.0.1:${PORT}`)
+if (fs.existsSync(DIST_DIR)) {
+  app.use(express.static(DIST_DIR))
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next()
+    res.sendFile(path.join(DIST_DIR, 'index.html'), (err) => {
+      if (err) next(err)
+    })
+  })
+} else {
+  console.warn('[padel-pro] dist/ not found — run npm run build before starting in production.')
+}
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`PADEL PRO listening on port ${PORT}`)
   if (!GMAIL_USER || !GMAIL_PASS) console.warn('[booking-api] Gmail env missing — approval emails will fail.')
   if (!ADMIN_KEY) console.warn('[booking-api] ADMIN_API_KEY missing — admin booking list/approve disabled.')
 })
