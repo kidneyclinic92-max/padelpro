@@ -56,7 +56,7 @@ export default function AdminLayout() {
           <h1 style={h1}>Padel Pro — Admin</h1>
           {!envPwd ? (
             <p style={hint}>
-              Set <code style={code}>VITE_ADMIN_PASSWORD</code> in <code style={code}>padel-noir/.env</code> to protect this panel.
+              Set <code style={code}>VITE_ADMIN_PASSWORD</code> in the repo root <code style={code}>.env</code> to protect this panel.
               Until then, access is open.
             </p>
           ) : null}

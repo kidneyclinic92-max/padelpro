@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useAdminApiKey } from './useAdminApiKey'
 
 const api = (path) => (import.meta.env.VITE_API_BASE || '') + path
 
 export default function AdminBookings() {
-  const adminKey = import.meta.env.VITE_ADMIN_API_KEY || ''
+  const { adminKey, saveAdminKey, clearAdminKey, hasBuiltInKey } = useAdminApiKey()
+  const [keyInput, setKeyInput] = useState('')
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
   const [err, setErr] = useState('')
@@ -11,7 +13,6 @@ export default function AdminBookings() {
 
   const load = useCallback(async () => {
     if (!adminKey) {
-      setErr('Set VITE_ADMIN_API_KEY in padel-noir/.env (must match server ADMIN_API_KEY).')
       setLoading(false)
       return
     }
@@ -60,6 +61,48 @@ export default function AdminBookings() {
   const pending = bookings.filter((b) => b.status === 'pending')
   const done = bookings.filter((b) => b.status === 'approved')
 
+  if (!adminKey) {
+    return (
+      <div>
+        <h1 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 36, letterSpacing: '.06em', marginBottom: 8 }}>
+          Court bookings
+        </h1>
+        <p style={{ color: 'rgba(240,237,230,.55)', fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>
+          Enter the same value as <code style={code}>ADMIN_API_KEY</code> on the server (repo root{' '}
+          <code style={code}>.env</code> locally, Azure Application settings in production).
+        </p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            if (!keyInput.trim()) {
+              setErr('Admin API key is required.')
+              return
+            }
+            setErr('')
+            saveAdminKey(keyInput)
+          }}
+          style={{ maxWidth: 420 }}
+        >
+          <label style={label} htmlFor="admin-api-key">
+            Admin API key
+          </label>
+          <input
+            id="admin-api-key"
+            type="password"
+            value={keyInput}
+            onChange={(e) => setKeyInput(e.target.value)}
+            style={input}
+            autoComplete="off"
+          />
+          <button type="submit" style={{ ...btn, marginTop: 12 }}>
+            Continue
+          </button>
+        </form>
+        {err ? <p style={{ color: '#ff8a80', marginTop: 16 }}>{err}</p> : null}
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 36, letterSpacing: '.06em', marginBottom: 8 }}>
@@ -68,6 +111,12 @@ export default function AdminBookings() {
       <p style={{ color: 'rgba(240,237,230,.55)', fontSize: 14, lineHeight: 1.6, marginBottom: 24 }}>
         Pending requests appear first. Approving sends the confirmation email to the guest via Gmail (server).
       </p>
+
+      {!hasBuiltInKey ? (
+        <button type="button" onClick={clearAdminKey} style={{ ...btnGhost, marginBottom: 16 }}>
+          Change admin API key
+        </button>
+      ) : null}
 
       <button type="button" onClick={load} style={btnGhost} disabled={loading}>
         {loading ? 'Loading…' : 'Refresh'}
@@ -147,6 +196,32 @@ export default function AdminBookings() {
       )}
     </div>
   )
+}
+
+const code = {
+  fontFamily: 'monospace',
+  fontSize: 12,
+  background: 'rgba(240,237,230,.08)',
+  padding: '2px 6px',
+  borderRadius: 3,
+}
+const label = {
+  display: 'block',
+  fontSize: 10,
+  letterSpacing: '.14em',
+  textTransform: 'uppercase',
+  color: 'rgba(240,237,230,.45)',
+  marginBottom: 8,
+}
+const input = {
+  width: '100%',
+  padding: '12px 14px',
+  background: 'rgba(240,237,230,.06)',
+  border: '1px solid rgba(240,237,230,.15)',
+  borderRadius: 4,
+  color: '#f0ede6',
+  fontSize: 14,
+  boxSizing: 'border-box',
 }
 
 const h2 = {
