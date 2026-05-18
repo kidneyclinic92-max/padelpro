@@ -34,21 +34,22 @@ export default function Showcase() {
   const finalOpacity = useTransform(p, [.7, 1], [0, 1])
 
   return (
-    <section ref={ref} style={sectionStyle}>
+    <section ref={ref} className="showcase-section" style={sectionStyle}>
       {/* Pinned canvas — viewport-sized */}
-      <div style={sticky}>
+      <div className="showcase-sticky" style={sticky}>
         {/* Backdrop atmosphere */}
         <div style={bgGrid} aria-hidden />
         <div style={bgGlow}  aria-hidden />
 
         {/* Floating eyebrow */}
-        <motion.div style={{ ...eyebrow, opacity: eyebrowOpacity }}>
+        <motion.div className="showcase-eyebrow" style={{ ...eyebrow, opacity: eyebrowOpacity }}>
           <span style={eyebrowLine} />
           {sh.eyebrow}
         </motion.div>
 
         {/* Big stacked title */}
         <motion.h2
+          className="showcase-title"
           style={{ ...title, y: titleY, scale: titleScale, opacity: titleOpacity }}
           aria-label={sh.titleAria}
         >
@@ -74,6 +75,7 @@ export default function Showcase() {
         {SPECS.map((s) => (
           <motion.div
             key={s.tag}
+            className="showcase-spec"
             style={{
               ...specCard,
               left: s.x, top: s.y,
@@ -90,7 +92,7 @@ export default function Showcase() {
         ))}
 
         {/* Bottom revealing line */}
-        <motion.div style={{ ...finalLine, y: finalY, opacity: finalOpacity }}>
+        <motion.div className="showcase-final-line" style={{ ...finalLine, y: finalY, opacity: finalOpacity }}>
           <span style={finalDot} />
           <span style={finalText}>{sh.finalText}</span>
           <span style={finalDot} />

@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useSiteContent } from '../context/SiteContentContext'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
 const PANELS_FALLBACK = [
   { idx: '01', tag: 'COMPETITION', title: 'Tournament Series', caption: 'Weekly ladders · monthly opens · annual championship.', accent: '#ff7a3d' },
@@ -18,6 +19,7 @@ export default function Reel() {
   const reelTotalStr = String(n).padStart(2, '0')
 
   const ref = useRef(null)
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -29,10 +31,10 @@ export default function Reel() {
   const x = useTransform(p, [0, 1], ['0%', reelXEnd])
 
   return (
-    <section ref={ref} style={{ ...section, height: reelSectionHeight }}>
-      <div style={sticky}>
+    <section ref={ref} className="reel-section" style={{ ...section, height: isMobile ? 'auto' : reelSectionHeight }}>
+      <div className="reel-sticky" style={sticky}>
         {/* Top fixed label */}
-        <div style={topbar}>
+        <div className="reel-topbar" style={topbar}>
           <span style={topLabel}>
             <span style={topDash} />
             {rl.topLabel}
@@ -41,9 +43,9 @@ export default function Reel() {
         </div>
 
         {/* Horizontal track */}
-        <motion.div style={{ ...track, x }}>
+        <motion.div className="reel-track" style={{ ...track, ...(isMobile ? {} : { x }) }}>
           {panels.map((panel, i) => (
-            <article key={panel.idx} style={panelStyle}>
+            <article key={panel.idx} className="reel-panel" style={panelStyle}>
               {/* Panel index */}
               <div style={panelIndex}>{panel.idx} / {reelTotalStr}</div>
 
@@ -79,7 +81,7 @@ export default function Reel() {
         </motion.div>
 
         {/* Progress dots */}
-        <div style={dotsRow}>
+        <div className="reel-dots" style={dotsRow}>
           {panels.map((_, i) => (
             <Dot key={i} progress={scrollYProgress} idx={i} total={panels.length} />
           ))}

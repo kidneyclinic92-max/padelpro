@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import MagneticButton from './MagneticButton'
 import { useSiteContent } from '../context/SiteContentContext'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
 export default function Hero({ onBook }) {
   const { content } = useSiteContent()
@@ -23,6 +24,7 @@ export default function Hero({ onBook }) {
 
   /* ── Canvas cinematic animation ── */
   useEffect(() => {
+    if (isMobile) return
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -270,36 +272,57 @@ export default function Hero({ onBook }) {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', resize)
     }
-  }, [])
+  }, [isMobile])
 
   const WORDS = (h.headline || 'DOMINATE THE COURT').trim().split(/\s+/).filter(Boolean)
 
   return (
-    <section id="hero" ref={sectionRef} style={heroSection}>
+    <section id="hero" ref={sectionRef} className="hero-section" style={heroSection}>
 
-      {/* ── Background video — scale on motion element directly, no wrapper ── */}
-      <motion.video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        poster={h.posterSrc || '/herosection.jpg'}
-        style={{ ...videoStyle, scale: imgScale }}
+      <div className="hero-media" aria-hidden>
+        {isMobile ? (
+          <video
+            className="hero-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={h.posterSrc || '/herosection.jpg'}
+          >
+            <source src={h.videoSrc || '/herosection_video.mp4'} type="video/mp4" />
+          </video>
+        ) : (
+          <motion.video
+            className="hero-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={h.posterSrc || '/herosection.jpg'}
+            style={{ scale: imgScale }}
+          >
+            <source src={h.videoSrc || '/herosection_video.mp4'} type="video/mp4" />
+          </motion.video>
+        )}
+
+        {!isMobile && <canvas ref={canvasRef} className="hero-canvas" style={canvasStyle} />}
+
+        <motion.div className="hero-overlays">
+          <motion.div className="hero-overlay hero-overlay--gradient" style={gradientOverlay} />
+          <div className="hero-overlay hero-overlay--vignette" style={vignetteOverlay} />
+          <div className="hero-overlay hero-overlay--editorial" style={editorialOverlay} />
+        </motion.div>
+      </div>
+
+      <motion.div
+        className="hero-content"
+        style={{
+          ...contentWrap,
+          ...(isMobile ? {} : { y: parallaxY, opacity }),
+        }}
       >
-        <source src={h.videoSrc || '/herosection_video.mp4'} type="video/mp4" />
-      </motion.video>
-
-      {/* ── Canvas animation layer ── */}
-      <canvas ref={canvasRef} style={canvasStyle} aria-hidden />
-
-      {/* ── Gradient & vignette overlays ── */}
-      <div style={gradientOverlay} />
-      <div style={vignetteOverlay} />
-      <div style={editorialOverlay} />
-
-      {/* ── Text content (bottom-left editorial anchor) ── */}
-      <motion.div className="hero-content" style={{ ...contentWrap, y: parallaxY, opacity }}>
         {/* Headline split reveal */}
         <h1 className="hero-headline" style={headline} aria-label={h.headline || 'Hero'}>
           {WORDS.map((word, i) => (
@@ -357,7 +380,7 @@ export default function Hero({ onBook }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.7, duration: .9 }}
-        className="hero-stat-row"
+        className="hero-stat-row hero-stat-row--bar"
         style={statRow}
       >
         {(h.stats || []).map(({ value, label }) => (
@@ -373,18 +396,10 @@ export default function Hero({ onBook }) {
 
 /* ── STYLES ── */
 const heroSection = {
-  position: 'relative', width: '100%', height: '100vh',
+  position: 'relative',
+  width: '100%',
   overflow: 'hidden',
   background: '#050a08',
-}
-const videoStyle = {
-  position: 'absolute', inset: 0,
-  width: '100%', height: '100%',
-  objectFit: 'cover', objectPosition: 'center 40%',
-  imageRendering: 'high-quality',
-  backfaceVisibility: 'hidden',
-  WebkitBackfaceVisibility: 'hidden',
-  transformOrigin: 'center center',
 }
 const canvasStyle = {
   position: 'absolute', inset: 0,
@@ -431,11 +446,13 @@ const contentWrap = {
   alignItems: 'flex-start',
 }
 const headline = {
-  fontSize: 'clamp(40px,6.4vw,84px)', lineHeight: .96,
-  display: 'flex', flexWrap: 'nowrap',
-  justifyContent: 'flex-start', gap: '0 .25em',
+  fontSize: 'clamp(40px,6.4vw,84px)',
+  lineHeight: .96,
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'flex-start',
+  gap: '0 .2em',
   letterSpacing: '-.01em',
-  whiteSpace: 'nowrap',
 }
 const wordOuter = { display: 'inline-block', overflow: 'hidden' }
 const ctaRow = {
