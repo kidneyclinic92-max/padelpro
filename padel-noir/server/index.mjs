@@ -181,15 +181,20 @@ app.post('/api/bookings/:id/approve', requireAdmin, async (req, res) => {
 })
 
 if (fs.existsSync(DIST_DIR)) {
-  app.use(express.static(DIST_DIR))
+  app.use(express.static(DIST_DIR, { index: false, maxAge: '1d' }))
+
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) return next()
+    if (req.path.includes('.')) return next()
     res.sendFile(path.join(DIST_DIR, 'index.html'), (err) => {
       if (err) next(err)
     })
   })
 } else {
   console.warn('[padel-pro] dist/ not found — run npm run build before starting in production.')
+  app.get('/', (_req, res) => {
+    res.status(503).send('PADEL PRO: run npm run build, then npm start.')
+  })
 }
 
 app.listen(PORT, '0.0.0.0', () => {

@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react'
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import MagneticButton from './MagneticButton'
 import { useSiteContent } from '../context/SiteContentContext'
@@ -11,6 +11,8 @@ export default function Hero({ onBook }) {
   const sectionRef = useRef(null)
   const canvasRef  = useRef(null)
   const navigate   = useNavigate()
+  const isMobile   = useMediaQuery('(max-width: 768px)')
+  const reduceMotion = useReducedMotion()
 
   /* ── Framer Motion parallax on scroll ── */
   const { scrollYProgress } = useScroll({
@@ -328,7 +330,7 @@ export default function Hero({ onBook }) {
           {WORDS.map((word, i) => (
             <span key={word} style={wordOuter}>
               <motion.span
-                initial={{ y: '115%', skewY: 7 }}
+                initial={reduceMotion ? false : { y: '115%', skewY: 7 }}
                 animate={{ y: 0, skewY: 0 }}
                 transition={{ duration: 1.05, delay: .6 + i * .18, ease: [.16,1,.3,1] }}
                 style={{ display: 'block' }}

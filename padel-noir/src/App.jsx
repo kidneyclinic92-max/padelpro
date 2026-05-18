@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 
 import Cursor       from './components/Cursor'
 import Nav          from './components/Nav'
@@ -19,14 +19,15 @@ import AdminRoutes    from './admin/AdminRoutes'
 
 function AnimatedRoutes({ onBook }) {
   const location = useLocation()
+  const reduceMotion = useReducedMotion()
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0, y: 12 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
+        exit={reduceMotion ? false : { opacity: 0, y: -8 }}
         transition={{ duration: .5, ease: [.16,1,.3,1] }}
       >
         <Routes location={location} key={location.pathname}>
@@ -44,7 +45,6 @@ function AnimatedRoutes({ onBook }) {
 
 function PublicApp() {
   const [modalOpen, setModalOpen] = useState(false)
-  const [wipeDone,  setWipeDone]  = useState(false)
   const open  = () => setModalOpen(true)
   const close = () => setModalOpen(false)
 
@@ -56,20 +56,6 @@ function PublicApp() {
 
   return (
     <SmoothScroll>
-      <AnimatePresence>
-        {!wipeDone && (
-          <motion.div
-            key="wipe"
-            initial={{ scaleY: 1 }}
-            animate={{ scaleY: 0 }}
-            exit={{}}
-            transition={{ duration: .85, delay: .2, ease: [.76,0,.24,1] }}
-            style={wipeStyle}
-            onAnimationComplete={() => setWipeDone(true)}
-          />
-        )}
-      </AnimatePresence>
-
       <ScrollToTop />
       <Cursor />
       <ScrollMeter />
@@ -101,10 +87,3 @@ export default function App() {
   )
 }
 
-const wipeStyle = {
-  position: 'fixed', inset: 0,
-  background: '#000',
-  zIndex: 9999,
-  transformOrigin: 'top',
-  pointerEvents: 'none',
-}
