@@ -58,14 +58,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2617637AB0174B19BBBEFBD42538942E }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4A89B5630CB741B88A3BAF8DBEDB7FAB }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6B5B18FE9FC64256AE7699FEA2CF7B8B }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_167FBFE06E2C447489B279DFD6C043E5 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_46259B2B05754478AEC5F80826F1CED2 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_016F1C584AF54DDDAB9436147A3A3272 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'padel-pro'
+          app-name: 'padel-pro1'
           slot-name: 'Production'
           package: .
