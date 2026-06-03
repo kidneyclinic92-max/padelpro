@@ -89,7 +89,7 @@ export const DEFAULT_SITE_CONTENT = {
       eyebrow: 'Courts',
       title: 'TWO PRISTINE COURTS',
       accentWord: 'PRISTINE',
-      subtitle: 'Panoramic glass, climate-controlled hardcourts, championship turf — each surface engineered to host the highest level of play.',
+      subtitle: 'Two climate-controlled panoramic courts — each engineered to host the highest level of play.',
     },
     coaches: {
       eyebrow: 'Coaches',
@@ -123,13 +123,11 @@ export const DEFAULT_SITE_CONTENT = {
       sectionLabel: 'Our Facilities',
       titleLine1: 'THE',
       titleLine2: 'COURTS',
-      stripCaption: 'Drag to explore all four courts — each engineered for peak performance.',
+      stripCaption: 'Two premium courts — drag to explore each surface.',
       bookLayer: 'BOOK THIS COURT →',
       cards: [
-        { n: '01', name: 'COURT NOIR', badge: 'Panoramic Glass', color: '#0e1a0a', accent: '#1d320f' },
-        { n: '02', name: 'COURT BLEU', badge: 'Hardcourt Surface', color: '#080d18', accent: '#0d1630' },
-        { n: '03', name: 'COURT AMBER', badge: 'Artificial Turf', color: '#180e06', accent: '#2a1a08' },
-        { n: '04', name: 'COURT ELITE', badge: 'Championship Grade', color: '#100a18', accent: '#1c1028' },
+        { n: '01', name: 'COURT NO 1', badge: 'Panoramic Glass', color: '#0e1a0a', accent: '#1d320f' },
+        { n: '02', name: 'COURT NO 2', badge: 'Hardcourt Surface', color: '#080d18', accent: '#0d1630' },
       ],
     },
     coaches: {
@@ -237,10 +235,8 @@ export const DEFAULT_SITE_CONTENT = {
       successTitle: 'COURT RESERVED!',
       successBody: "You'll receive a confirmation shortly.\nSee you on the court.",
       courts: [
-        'Court Noir — Panoramic Glass',
-        'Court Bleu — Hardcourt',
-        'Court Amber — Artificial Turf',
-        'Court Elite — Championship',
+        'Court No 1 — Panoramic Glass',
+        'Court No 2 — Hardcourt',
       ],
       timeslots: [
         '06:00–07:00', '07:00–08:00', '08:00–09:00', '09:00–10:00', '10:00–11:00', '12:00–13:00',

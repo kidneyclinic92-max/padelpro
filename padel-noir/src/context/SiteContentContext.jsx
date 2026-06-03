@@ -4,12 +4,29 @@ import { deepMerge, getAt, setAt } from '../utils/siteContentUtils'
 
 const SiteContentContext = createContext(null)
 
+function migrateCourts(content) {
+  const cards = content?.sections?.courts?.cards
+  const legacyNames = new Set(['COURT NOIR', 'COURT BLEU', 'COURT AMBER', 'COURT ELITE'])
+  const needsCourts =
+    !Array.isArray(cards) ||
+    cards.length !== 2 ||
+    cards.some((c) => legacyNames.has(c?.name))
+  if (!needsCourts) return content
+
+  const next = structuredClone(content)
+  next.sections.courts.cards = structuredClone(DEFAULT_SITE_CONTENT.sections.courts.cards)
+  next.sections.courts.stripCaption = DEFAULT_SITE_CONTENT.sections.courts.stripCaption
+  next.pageHero.courts.subtitle = DEFAULT_SITE_CONTENT.pageHero.courts.subtitle
+  next.sections.modal.courts = structuredClone(DEFAULT_SITE_CONTENT.sections.modal.courts)
+  return next
+}
+
 function loadMerged() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return structuredClone(DEFAULT_SITE_CONTENT)
     const parsed = JSON.parse(raw)
-    return deepMerge(DEFAULT_SITE_CONTENT, parsed)
+    return migrateCourts(deepMerge(DEFAULT_SITE_CONTENT, parsed))
   } catch {
     return structuredClone(DEFAULT_SITE_CONTENT)
   }

@@ -3,10 +3,8 @@ import { motion, useInView } from 'framer-motion'
 import { useSiteContent } from '../context/SiteContentContext'
 
 const COURTS_FALLBACK = [
-  { n: '01', name: 'COURT NOIR',  badge: 'Panoramic Glass',    color: '#0e1a0a', accent: '#1d320f' },
-  { n: '02', name: 'COURT BLEU',  badge: 'Hardcourt Surface',  color: '#080d18', accent: '#0d1630' },
-  { n: '03', name: 'COURT AMBER', badge: 'Artificial Turf',    color: '#180e06', accent: '#2a1a08' },
-  { n: '04', name: 'COURT ELITE', badge: 'Championship Grade', color: '#100a18', accent: '#1c1028' },
+  { n: '01', name: 'COURT NO 1', badge: 'Panoramic Glass',   color: '#0e1a0a', accent: '#1d320f' },
+  { n: '02', name: 'COURT NO 2', badge: 'Hardcourt Surface', color: '#080d18', accent: '#0d1630' },
 ]
 
 function CourtCard({ court, onBook, delay, bookLabel }) {
@@ -107,7 +105,7 @@ export default function Courts({ onBook }) {
         style={{ margin: '0 auto 52px' }}
       >
         <div className="section-label">{ct.sectionLabel}</div>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+        <div className="courts-header-row" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
           <h2 style={{ fontSize: 'clamp(52px,7vw,100px)', lineHeight: .92 }}>
             {ct.titleLine1}<br />{ct.titleLine2}
           </h2>

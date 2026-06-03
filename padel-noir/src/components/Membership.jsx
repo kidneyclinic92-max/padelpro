@@ -45,12 +45,12 @@ function TierCard({ tier, delay, onBook, ctaLabel }) {
       )}
 
       {tier.badge && (
-        <div style={badgeStyle}>{tier.badge}</div>
+        <div className="membership-tier-badge" style={badgeStyle}>{tier.badge}</div>
       )}
 
       <div style={tierName}>{tier.name}</div>
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 4, margin: '16px 0 4px' }}>
+      <div className="membership-tier-price" style={{ display: 'flex', alignItems: 'flex-start', gap: 4, margin: '16px 0 4px' }}>
         <span style={supStyle}>€</span>
         <span style={priceStyle}>{tier.price}</span>
       </div>

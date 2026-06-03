@@ -24,7 +24,7 @@ export default function ScrollMeter() {
       </motion.div>
 
       {/* Floating percentage indicator (bottom-right) */}
-      <div style={pctWrap} aria-hidden>
+      <div className="scroll-meter-pct" style={pctWrap} aria-hidden>
         <span style={pctNum}>{String(pct).padStart(2, '0')}</span>
         <span style={pctSign}>%</span>
       </div>

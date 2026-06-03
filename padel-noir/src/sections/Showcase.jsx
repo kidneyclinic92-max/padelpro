@@ -1,53 +1,83 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useSiteContent } from '../context/SiteContentContext'
+import { useMediaQuery } from '../hooks/useMediaQuery'
+
+function CourtStage({ style }) {
+  return (
+    <div className="showcase-court" style={style}>
+      <div style={courtCenterLine} />
+      <div style={courtNet} />
+      <div style={courtBackWall} />
+      <div style={courtSideLine} />
+      <div style={courtFrontLine} />
+      <div style={stageOverlay} />
+    </div>
+  )
+}
 
 export default function Showcase() {
   const { content } = useSiteContent()
   const sh = content.home.showcase
   const SPECS = sh.specs || []
   const ref = useRef(null)
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start start', 'end end'],
+    enabled: !isMobile,
   })
   const p = useSpring(scrollYProgress, { stiffness: 80, damping: 22, mass: .4 })
 
-  /* Hero text reveal */
   const eyebrowOpacity = useTransform(p, [0, .1], [0, 1])
   const titleY         = useTransform(p, [0, .35], ['0vh', '-3vh'])
   const titleScale     = useTransform(p, [0, .35], [1, .92])
   const titleOpacity   = useTransform(p, [.55, .8],  [1, 0])
+  const imgScale       = useTransform(p, [0, .55], [.85, 1.08])
+  const imgY           = useTransform(p, [0, 1], ['8%', '-8%'])
+  const imgOpacity     = useTransform(p, [0, .15, .85, 1], [.4, 1, 1, .55])
+  const specOpacity    = useTransform(p, [.15, .4], [0, 1])
+  const specY          = useTransform(p, [.15, .4], ['16px', '0px'])
+  const finalY         = useTransform(p, [.7, 1], ['40%', '0%'])
+  const finalOpacity   = useTransform(p, [.7, 1], [0, 1])
 
-  /* Image stage */
-  const imgScale  = useTransform(p, [0, .55], [.85, 1.08])
-  const imgY      = useTransform(p, [0, 1], ['8%', '-8%'])
-  const imgOpacity = useTransform(p, [0, .15, .85, 1], [.4, 1, 1, .55])
-
-  /* Spec callout reveals */
-  const specOpacity = useTransform(p, [.15, .4], [0, 1])
-  const specY       = useTransform(p, [.15, .4], ['16px', '0px'])
-
-  /* Bottom marquee headline */
-  const finalY       = useTransform(p, [.7, 1], ['40%', '0%'])
-  const finalOpacity = useTransform(p, [.7, 1], [0, 1])
+  if (isMobile) {
+    return (
+      <section className="showcase-section showcase-section--mobile">
+        <div className="showcase-mobile">
+          <p className="showcase-mobile-eyebrow">
+            <span style={eyebrowLine} />
+            {sh.eyebrow}
+          </p>
+          <h2 className="showcase-mobile-title" aria-label={sh.titleAria}>
+            <span>{sh.titleLine1}</span>
+            <span className="showcase-mobile-title-accent">{sh.titleLine2}</span>
+          </h2>
+          <div className="showcase-mobile-stage">
+            <CourtStage style={stageInnerMobile} />
+          </div>
+          <p className="showcase-mobile-footer">
+            <span style={finalDot} />
+            <span>{sh.finalText}</span>
+            <span style={finalDot} />
+          </p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section ref={ref} className="showcase-section" style={sectionStyle}>
-      {/* Pinned canvas — viewport-sized */}
       <div className="showcase-sticky" style={sticky}>
-        {/* Backdrop atmosphere */}
         <div style={bgGrid} aria-hidden />
-        <div style={bgGlow}  aria-hidden />
+        <div style={bgGlow} aria-hidden />
 
-        {/* Floating eyebrow */}
         <motion.div className="showcase-eyebrow" style={{ ...eyebrow, opacity: eyebrowOpacity }}>
           <span style={eyebrowLine} />
           {sh.eyebrow}
         </motion.div>
 
-        {/* Big stacked title */}
         <motion.h2
           className="showcase-title"
           style={{ ...title, y: titleY, scale: titleScale, opacity: titleOpacity }}
@@ -57,21 +87,10 @@ export default function Showcase() {
           <span style={{ ...titleLine, color: '#c8ff00' }}>{sh.titleLine2}</span>
         </motion.h2>
 
-        {/* Court image stage */}
-        <motion.div style={{ ...stage, scale: imgScale, y: imgY, opacity: imgOpacity }}>
-          <div style={stageInner}>
-            <div style={courtCenterLine} />
-            <div style={courtNet} />
-            <div style={courtBackWall} />
-            <div style={courtSideLine} />
-            <div style={courtFrontLine} />
-
-            {/* Atmospheric overlay */}
-            <div style={stageOverlay} />
-          </div>
+        <motion.div className="showcase-stage" style={{ ...stage, scale: imgScale, y: imgY, opacity: imgOpacity }}>
+          <CourtStage style={stageInner} />
         </motion.div>
 
-        {/* Floating spec callouts */}
         {SPECS.map((s) => (
           <motion.div
             key={s.tag}
@@ -91,7 +110,6 @@ export default function Showcase() {
           </motion.div>
         ))}
 
-        {/* Bottom revealing line */}
         <motion.div className="showcase-final-line" style={{ ...finalLine, y: finalY, opacity: finalOpacity }}>
           <span style={finalDot} />
           <span style={finalText}>{sh.finalText}</span>
@@ -102,7 +120,6 @@ export default function Showcase() {
   )
 }
 
-/* ── STYLES ── */
 const sectionStyle = {
   position: 'relative',
   height: '280vh',
@@ -128,7 +145,6 @@ const bgGlow = {
   position: 'absolute', inset: 0, zIndex: 1,
   background: 'radial-gradient(ellipse at 50% 60%, rgba(200,255,0,.08) 0%, transparent 55%)',
 }
-
 const eyebrow = {
   position: 'absolute', top: 'clamp(96px,14vh,140px)', left: '50%',
   transform: 'translateX(-50%)', zIndex: 4,
@@ -152,7 +168,6 @@ const title = {
   pointerEvents: 'none',
 }
 const titleLine = { display: 'block' }
-
 const stage = {
   position: 'absolute', inset: 0, zIndex: 2,
   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -166,6 +181,13 @@ const stageInner = {
   borderRadius: 6,
   overflow: 'hidden',
   boxShadow: '0 50px 120px rgba(0,0,0,.55), inset 0 0 80px rgba(200,255,0,.06)',
+}
+const stageInnerMobile = {
+  ...stageInner,
+  width: '100%',
+  maxWidth: 340,
+  height: 220,
+  margin: '0 auto',
 }
 const courtCenterLine = {
   position: 'absolute', top: 0, bottom: 0, left: '50%',
@@ -198,7 +220,6 @@ const stageOverlay = {
   position: 'absolute', inset: 0,
   background: 'linear-gradient(180deg, rgba(0,0,0,.0) 30%, rgba(0,0,0,.4) 100%), radial-gradient(circle at 50% 30%, rgba(200,255,0,.18) 0%, transparent 60%)',
 }
-
 const specCard = {
   position: 'absolute', zIndex: 5,
   display: 'flex', flexDirection: 'column', gap: 8,
@@ -231,7 +252,6 @@ const specConnector = {
   width: 1, height: 22,
   background: 'linear-gradient(180deg, rgba(200,255,0,.5), transparent)',
 }
-
 const finalLine = {
   position: 'absolute', bottom: 'clamp(48px,7vh,80px)', left: '50%',
   transform: 'translateX(-50%)', zIndex: 4,

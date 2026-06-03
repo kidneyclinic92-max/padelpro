@@ -6,12 +6,12 @@ import Reel        from '../sections/Reel'
 
 export default function Home({ onBook }) {
   return (
-    <>
+    <div className="home-page">
       <Hero onBook={onBook} />
       <Ticker />
       <Showcase />
       <Pillars />
       <Reel />
-    </>
+    </div>
   )
 }
